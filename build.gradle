@@ -36,6 +36,8 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+
+	implementation 'net.nurigo:sdk:4.3.0'
 }
 
 tasks.named('test') {

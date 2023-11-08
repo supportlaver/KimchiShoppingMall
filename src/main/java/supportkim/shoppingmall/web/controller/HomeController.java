@@ -9,4 +9,8 @@ public class HomeController {
     public String home() {
         return "home";
     }
+    @GetMapping("/prac")
+    public String prac() {
+        return "pra";
+    }
 }

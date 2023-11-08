@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import supportkim.shoppingmall.domain.member.Address;
 import supportkim.shoppingmall.domain.member.Member;
 import supportkim.shoppingmall.domain.member.Role;
 import supportkim.shoppingmall.service.MemberService;
@@ -31,6 +32,12 @@ public class SignUpController {
 
     @PostMapping("/sign-up")
     public String signUp(MemberForm memberForm){
+        Address address = Address.builder()
+                .zipCode(memberForm.getZipCode())
+                .reference(memberForm.getReference())
+                .streetCode(memberForm.getStreetCode())
+                .moreInfo(memberForm.getMoreInfo())
+                .build();
         Member member = Member.builder()
                 .name(memberForm.getName())
                 .email(memberForm.getEmail())
@@ -38,6 +45,7 @@ public class SignUpController {
                 .password(passwordEncoder.encode(memberForm.getPassword()))
                 .loginId(memberForm.getLoginId())
                 .role(Role.ADMIN)
+                .address(address)
                 .build();
         memberService.join(member);
         return "/sign-up/sign-up-success";

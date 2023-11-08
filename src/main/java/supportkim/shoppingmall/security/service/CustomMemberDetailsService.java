@@ -23,10 +23,7 @@ public class CustomMemberDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
         Member member = memberService.findByLoginId(loginId);
-        log.info("loginId : {}",loginId);
-
         if (member==null) {
-            log.info("Current LoginId Not Found Exception");
             throw new UsernameNotFoundException("Current LoginId Not Found Exception");
         }
         List<GrantedAuthority> roles = new ArrayList<>();

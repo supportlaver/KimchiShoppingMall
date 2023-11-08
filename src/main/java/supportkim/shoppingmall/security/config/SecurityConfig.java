@@ -12,6 +12,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import supportkim.shoppingmall.security.handler.CustomAccessDeniedHandler;
+import supportkim.shoppingmall.security.handler.CustomAuthenticationFailureHandler;
+import supportkim.shoppingmall.security.handler.CustomAuthenticationSuccessHandler;
 import supportkim.shoppingmall.security.provider.CustomAuthenticationProvider;
 
 @Configuration
@@ -38,6 +44,24 @@ public class SecurityConfig {
     }
 
     @Bean
+    public AuthenticationFailureHandler authenticationFailureHandler() {
+        return new CustomAuthenticationFailureHandler();
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler authenticationSuccessHandler() {
+        return new CustomAuthenticationSuccessHandler();
+    }
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        CustomAccessDeniedHandler accessDeniedHandler = new CustomAccessDeniedHandler();
+        accessDeniedHandler.setErrorPage("/denied");;
+        return accessDeniedHandler;
+    }
+
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authRequest -> authRequest
@@ -48,8 +72,14 @@ public class SecurityConfig {
                 .formLogin(formLogin-> formLogin
                         .loginPage("/login")
                         .loginProcessingUrl("/login_proc")
+                        .successHandler(authenticationSuccessHandler())
+                        .failureHandler(authenticationFailureHandler())
                         .defaultSuccessUrl("/")
-                        .permitAll());
+                        .permitAll())
+                .exceptionHandling((exceptionHandler) ->
+                        exceptionHandler
+                                .accessDeniedHandler(accessDeniedHandler()))
+                .csrf().disable();
         return http.build();
     }
 }
