@@ -37,7 +37,6 @@ public class SecurityConfig {
             web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
         };
     }
-
     @Bean
     public AuthenticationProvider authenticationProvider() {
         return new CustomAuthenticationProvider();
@@ -68,6 +67,7 @@ public class SecurityConfig {
                         // 상품 조회 , 상품 상세 조회 ,
                         .requestMatchers("/","/sign-up","/login","/kimchis","/kimchis/*","/cart").permitAll()
                         .requestMatchers("/mypage").hasRole("ADMIN")
+//                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .anyRequest().authenticated())
                 .formLogin(formLogin-> formLogin
                         .loginPage("/login")

@@ -1,4 +1,4 @@
-package supportkim.shoppingmall.domain.member;
+package supportkim.shoppingmall.domain;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;

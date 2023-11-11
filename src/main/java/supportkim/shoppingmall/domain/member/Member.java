@@ -2,6 +2,12 @@ package supportkim.shoppingmall.domain.member;
 
 import jakarta.persistence.*;
 import lombok.*;
+import supportkim.shoppingmall.domain.Address;
+import supportkim.shoppingmall.domain.Order;
+import supportkim.shoppingmall.domain.Review;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
@@ -14,6 +20,13 @@ public class Member {
     private String loginId;
     private String password;
     private String name;
+
+    @OneToMany(mappedBy = "member")
+    private List<Order> orders = new ArrayList<>();
+
+    // 회원이 담긴 리뷰 목록
+    @OneToMany(mappedBy = "member")
+    private List<Review> reviews = new ArrayList<>();
 
     @Embedded
     private Address address;
