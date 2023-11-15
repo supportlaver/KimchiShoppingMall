@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -31,12 +32,12 @@ public class SecurityConfig {
     }
 
     // 정적 자원 보안 필터 거치지 않음
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> {
-            web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
-        };
-    }
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return (web) -> {
+//            web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+//        };
+//    }
     @Bean
     public AuthenticationProvider authenticationProvider() {
         return new CustomAuthenticationProvider();
@@ -64,10 +65,11 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authRequest -> authRequest
+
                         // 상품 조회 , 상품 상세 조회 ,
-                        .requestMatchers("/","/sign-up","/login","/kimchis","/kimchis/*","/cart").permitAll()
+                        .requestMatchers("/*","/sign-up","/login", "/cart").permitAll()
                         .requestMatchers("/mypage").hasRole("ADMIN")
-//                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .anyRequest().authenticated())
                 .formLogin(formLogin-> formLogin
                         .loginPage("/login")

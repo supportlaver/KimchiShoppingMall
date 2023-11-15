@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.mapping.Set;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,14 +22,16 @@ public class Kimchi {
     // 김치에 대한 요약(간략한 정보)
     private String summaryInfo;
 
+    private String imageURL;
+
     private String name;
 
-    private int price;
+    @Enumerated(EnumType.STRING)
+    private KimchiType type;
 
-//    private List<String> imagesURL = new ArrayList<>();
+    private int price;
 
     // 해당 김치에 대한 리뷰들
     @OneToMany(mappedBy = "kimchi")
     private List<Review> reviews = new ArrayList<>();
-
 }

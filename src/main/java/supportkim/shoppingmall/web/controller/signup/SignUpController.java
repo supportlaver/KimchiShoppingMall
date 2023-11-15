@@ -33,26 +33,6 @@ public class SignUpController {
         return "/sign-up/sign-up";
     }
 
-//    @PostMapping("/sign-up")
-//    public String signUp(MemberJoinForm memberForm){
-//        Address address = Address.builder()
-//                .zipCode(memberForm.getZipCode())
-//                .reference(memberForm.getReference())
-//                .streetCode(memberForm.getStreetCode())
-//                .moreInfo(memberForm.getMoreInfo())
-//                .build();
-//        Member member = Member.builder()
-//                .name(memberForm.getName())
-//                .email(memberForm.getEmail())
-//                .phoneNumber(memberForm.getPhoneNumber())
-//                .password(passwordEncoder.encode(memberForm.getPassword()))
-//                .loginId(memberForm.getLoginId())
-//                .role(Role.ADMIN)
-//                .address(address)
-//                .build();
-//        memberService.join(member);
-//        return "/sign-up/sign-up-success";
-//    }
     @PostMapping("/sign-up")
     public String signUp(@Validated @ModelAttribute("memberForm") MemberJoinForm memberForm , BindingResult bindingResult){
         log.info("signUp In");
