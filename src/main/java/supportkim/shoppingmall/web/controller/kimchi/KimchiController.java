@@ -47,7 +47,7 @@ public class KimchiController {
     }
 
 
-    @GetMapping("/baechus-{kimchi}-detail")
+    @GetMapping("/baechus/{kimchi}/detail")
     public String baeChuDetail(@PathVariable("kimchi") Long id, Model model) {
         Kimchi findKimchi = kimchiRepository.findById(id)
                 .orElseThrow(IllegalArgumentException::new);
@@ -56,7 +56,7 @@ public class KimchiController {
         return "kimchi/detail";
     }
 
-    @GetMapping("/yeolmus-{kimchi}-detail")
+    @GetMapping("/yeolmus/{kimchi}/detail")
     public String yeolmuDetail(@PathVariable("kimchi") Long id, Model model) {
         Kimchi findKimchi = kimchiRepository.findById(id)
                 .orElseThrow(IllegalArgumentException::new);
@@ -64,7 +64,7 @@ public class KimchiController {
         return "kimchi/detail";
     }
 
-    @GetMapping("/radishs-{kimchi}-detail")
+    @GetMapping("/radishs/{kimchi}/detail")
     public String radishDetail(@PathVariable("kimchi") Long id, Model model) {
         Kimchi findKimchi = kimchiRepository.findById(id)
                 .orElseThrow(IllegalArgumentException::new);
@@ -72,19 +72,10 @@ public class KimchiController {
         return "kimchi/detail";
     }
 
-    @GetMapping("/green-onion-{kimchi}-detail")
+    @GetMapping("/green-onion/{kimchi}/detail")
     public String greenOnionDetail(@PathVariable("kimchi") Long id, Model model) {
         Kimchi findKimchi = kimchiRepository.findById(id)
                 .orElseThrow(IllegalArgumentException::new);
-        model.addAttribute("kimchi",findKimchi);
-        return "kimchi/detail";
-    }
-
-    @GetMapping("/baechus/{kimchi}/detail")
-    public String baeChuDetail_sub(@PathVariable("kimchi") Long id, Model model) {
-        Kimchi findKimchi = kimchiRepository.findById(id)
-                .orElseThrow(IllegalArgumentException::new);
-        log.info("findKimchi = {}",findKimchi.getName());
         model.addAttribute("kimchi",findKimchi);
         return "kimchi/detail";
     }

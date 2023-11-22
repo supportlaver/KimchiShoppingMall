@@ -47,7 +47,7 @@ public class CartController {
         return "cart/cart";
     }
 
-    @PostMapping("/add-cart-{kimchi}")
+    @PostMapping("/add-cart/{kimchi}")
     public String addCart(@PathVariable("kimchi") Long id, @RequestParam(value = "count", required = false) int count) {
 
         // 7 로 넣어도 왜 6 으로 들어가지..? 그래서 일단 +1 해주기

@@ -46,8 +46,8 @@ public class InitData {
                     .price(15000)
                     .type(KimchiType.B)
                     .summaryInfo("모든 재료 국내산으로 만든 엄마표 배추김치!")
-                    .imageURL("kimchi/baechu/baechu.jpeg")
-                    .moreInfoImageURL("kimchi/baechu/baechu-more-info.jpeg")
+                    .imageURL("/kimchi/baechu/baechu.jpeg")
+                    .moreInfoImageURL("/kimchi/baechu/baechu-more-info.jpeg")
                     .build();
             kimchiRepository.save(baeChu1);
         }
@@ -58,8 +58,8 @@ public class InitData {
                     .price(14000)
                     .type(KimchiType.Y)
                     .summaryInfo("모든 재료 국내산으로 만든 엄마표 열무김치!")
-                    .imageURL("kimchi/yeolmu/yeolmu.jpeg")
-                    .moreInfoImageURL("kimchi/yeolmu/yeolmu-more-info.jpeg")
+                    .imageURL("/kimchi/yeolmu/yeolmu.jpeg")
+                    .moreInfoImageURL("/kimchi/yeolmu/yeolmu-more-info.jpeg")
                     .build();
             kimchiRepository.save(yeolMu1);
         }
@@ -70,8 +70,8 @@ public class InitData {
                     .price(17000)
                     .type(KimchiType.GO)
                     .summaryInfo("모든 재료 국내산으로 만든 엄마표 파김치!")
-                    .imageURL("kimchi/green-onion/green-onion.png")
-                    .moreInfoImageURL("kimchi/green-onion/green-onion-more-info.png")
+                    .imageURL("/kimchi/green-onion/green-onion.png")
+                    .moreInfoImageURL("/kimchi/green-onion/green-onion-more-info.png")
                     .build();
             kimchiRepository.save(greenOnion1);
         }
@@ -82,8 +82,8 @@ public class InitData {
                     .price(17000)
                     .type(KimchiType.R)
                     .summaryInfo("모든 재료 국내산으로 만든 엄마표 깍뚜기!")
-                    .imageURL("kimchi/radish/radish.jpeg")
-                    .moreInfoImageURL("kimchi/radish/radish-more-info.jpeg")
+                    .imageURL("/kimchi/radish/radish.jpeg")
+                    .moreInfoImageURL("/kimchi/radish/radish-more-info.jpeg")
                     .build();
             kimchiRepository.save(radish1);
         }
@@ -93,8 +93,8 @@ public class InitData {
                     .price(17000)
                     .type(KimchiType.R)
                     .summaryInfo("모든 재료 국내산으로 만든 엄마표 총각김치!")
-                    .imageURL("kimchi/radish/radish-sub.jpeg")
-                    .moreInfoImageURL("kimchi/radish/radish-sub-more-info.jpeg")
+                    .imageURL("/kimchi/radish/radish-sub.jpeg")
+                    .moreInfoImageURL("/kimchi/radish/radish-sub-more-info.jpeg")
                     .build();
             kimchiRepository.save(radish1);
         }
