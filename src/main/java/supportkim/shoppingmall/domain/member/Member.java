@@ -2,9 +2,7 @@ package supportkim.shoppingmall.domain.member;
 
 import jakarta.persistence.*;
 import lombok.*;
-import supportkim.shoppingmall.domain.Address;
-import supportkim.shoppingmall.domain.Order;
-import supportkim.shoppingmall.domain.Review;
+import supportkim.shoppingmall.domain.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,4 +34,11 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToOne
+    private Cart cart;
+
+    public void setInitCart(Cart cart) {
+        this.cart = cart;
+    }
 }

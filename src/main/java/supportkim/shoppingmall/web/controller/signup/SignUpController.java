@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import supportkim.shoppingmall.domain.Address;
+import supportkim.shoppingmall.domain.Cart;
 import supportkim.shoppingmall.domain.member.Member;
 import supportkim.shoppingmall.domain.member.Role;
+import supportkim.shoppingmall.service.CartService;
 import supportkim.shoppingmall.service.MemberService;
 import supportkim.shoppingmall.web.form.MemberJoinForm;
 
@@ -23,10 +25,12 @@ import supportkim.shoppingmall.web.form.MemberJoinForm;
 public class SignUpController {
 
     private final MemberService memberService;
+    private final CartService cartService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    // 중복되는 아이디가 없어야 하기 때문에 이것을 위한 예외 처리가 필요하다.
     @GetMapping("/sign-up")
     public String signUp(Model model) {
         model.addAttribute("memberForm",new MemberJoinForm());
@@ -35,6 +39,8 @@ public class SignUpController {
 
     @PostMapping("/sign-up")
     public String signUp(@Validated @ModelAttribute("memberForm") MemberJoinForm memberForm , BindingResult bindingResult){
+        // 회원가입 할 때 한 회원에게 하나의 카트를 만들어서 넣어놓기
+
         log.info("signUp In");
 
         if (bindingResult.hasErrors()){
@@ -56,6 +62,11 @@ public class SignUpController {
                 .role(Role.ADMIN)
                 .address(address)
                 .build();
+
+        // Setter 가 닫혀있기 떄문에 연관관계 편의 메서드를 안 만들고 처리 (메서드로 묶는 것도 고려)
+        Cart cart = new Cart();
+        member.setInitCart(cart);
+        cart.setInitMember(member);
         memberService.join(member);
         return "/sign-up/sign-up-success";
     }

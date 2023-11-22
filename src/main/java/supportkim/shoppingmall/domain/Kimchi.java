@@ -23,6 +23,7 @@ public class Kimchi {
     private String summaryInfo;
 
     private String imageURL;
+    private String moreInfoImageURL;
 
     private String name;
 

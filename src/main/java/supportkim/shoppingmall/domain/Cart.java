@@ -1,34 +1,43 @@
 package supportkim.shoppingmall.domain;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import supportkim.shoppingmall.domain.member.Member;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Builder
 @Getter
-@NoArgsConstructor @AllArgsConstructor
+@AllArgsConstructor @NoArgsConstructor
+@Builder
 public class Cart {
 
     @Id @GeneratedValue
-    @Column(name="cart_id")
     private Long id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="member_id")
     private Member member;
 
-    @OneToMany
-    private List<OrderKimchi> orderKimchis = new ArrayList<>();
-
+    // 카트에 담긴 총 상품 개수
     private int count;
-    private int price;
 
+    @OneToMany(mappedBy = "cart")
+    private List<OrderKimchi> cartItems = new ArrayList<>();
 
+    public void addCount(int count) {
+        this.count += count;
+    }
 
+    public void setInitMember(Member member) {
+        this.member = member;
+    }
 
-
-
+    public void cancelCount(int count) {
+        this.count -= count;
+    }
 }

@@ -2,8 +2,11 @@ package supportkim.shoppingmall.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import supportkim.shoppingmall.domain.OrderKimchi;
 import supportkim.shoppingmall.domain.member.Member;
 import supportkim.shoppingmall.repository.MemberRepository;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +23,4 @@ public class MemberService {
         Member findMember = memberRepository.findByLoginId(loginId);
         return findMember;
     }
-
-
 }

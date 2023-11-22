@@ -26,4 +26,12 @@ public class OrderKimchi {
     private int orderPrice;
 
     private int count;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="cart_id")
+    private Cart cart;
+
+    public void addCount(int count) {
+        this.count += count;
+    }
 }

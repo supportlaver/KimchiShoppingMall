@@ -65,7 +65,6 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authRequest -> authRequest
-
                         // 상품 조회 , 상품 상세 조회 ,
                         .requestMatchers("/*","/sign-up","/login", "/cart").permitAll()
                         .requestMatchers("/mypage").hasRole("ADMIN")

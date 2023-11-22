@@ -6,4 +6,5 @@ import supportkim.shoppingmall.domain.member.Member;
 public interface MemberRepository extends JpaRepository<Member,Long> {
 
     Member findByLoginId(String loginId);
+    Member findByName(String name);
 }
