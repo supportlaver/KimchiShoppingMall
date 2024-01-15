@@ -47,6 +47,7 @@ public class CartController {
         return "cart/cart";
     }
 
+
     @PostMapping("/add-cart/{kimchi}")
     public String addCart(@PathVariable("kimchi") Long id, @RequestParam(value = "count", required = false) int count) {
 
@@ -83,7 +84,7 @@ public class CartController {
         return "redirect:/";
     }
 
-    @PostMapping("/delete-cart-{orderKimchi}")
+    @PostMapping("/delete-cart/{orderKimchi}")
     public String delete(@PathVariable("orderKimchi") Long id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String loginId = authentication.getName();
