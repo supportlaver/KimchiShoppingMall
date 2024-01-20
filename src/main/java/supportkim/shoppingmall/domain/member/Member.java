@@ -38,6 +38,9 @@ public class Member {
     @OneToOne
     private Cart cart;
 
+    @OneToMany
+    private List<Coupon> coupons;
+
     public void setInitCart(Cart cart) {
         this.cart = cart;
     }
