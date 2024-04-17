@@ -4,6 +4,7 @@ import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import supportkim.shoppingmall.api.dto.MemberRequestDto;
 
 @Embeddable
 @Builder
@@ -22,7 +23,13 @@ public class Address {
     // 참고사항
     private String reference;
 
-
-
-
+    // 생성 메서드 (회원가입 전용)
+    public static Address of(MemberRequestDto.SignUp signUpDto) {
+        return Address.builder()
+                .zipCode(signUpDto.getZipCode())
+                .reference(signUpDto.getReference())
+                .moreInfo(signUpDto.getMoreInfo())
+                .streetCode(signUpDto.getStreetCode())
+                .build();
+    }
 }

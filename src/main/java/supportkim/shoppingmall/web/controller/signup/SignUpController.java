@@ -31,7 +31,7 @@ public class SignUpController {
     private PasswordEncoder passwordEncoder;
 
     // 중복되는 아이디가 없어야 하기 때문에 이것을 위한 예외 처리가 필요하다.
-    @GetMapping("/sign-up")
+//    @GetMapping("/sign-up")
     public String signUp(Model model) {
         model.addAttribute("memberForm",new MemberJoinForm());
         return "/sign-up/sign-up";

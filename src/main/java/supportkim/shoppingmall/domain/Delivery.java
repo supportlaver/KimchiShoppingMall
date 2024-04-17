@@ -5,10 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import supportkim.shoppingmall.global.BaseEntity;
+
 @Entity
 @Getter @Builder
 @AllArgsConstructor @NoArgsConstructor
-public class Delivery {
+public class Delivery extends BaseEntity {
 
     @Id @GeneratedValue
     @Column(name="delivery_id")

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import supportkim.shoppingmall.domain.member.Member;
+import supportkim.shoppingmall.global.BaseEntity;
 
 import java.time.LocalDateTime;
 
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor @AllArgsConstructor
 @Getter
-public class Coupon extends CouponBasedEntity{
+public class Coupon extends BaseEntity {
 
     @Id @GeneratedValue
     private Long id;

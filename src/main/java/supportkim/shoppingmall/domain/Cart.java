@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import supportkim.shoppingmall.domain.member.Member;
+import supportkim.shoppingmall.global.BaseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor @NoArgsConstructor
 @Builder
-public class Cart {
+public class Cart extends BaseEntity {
 
     @Id @GeneratedValue
     private Long id;
@@ -39,5 +40,17 @@ public class Cart {
 
     public void cancelCount(int count) {
         this.count -= count;
+    }
+
+    // 생성 메서드 (회원가입 할 때 카트 할당)
+    public static Cart from() {
+        return Cart.builder()
+                .build();
+    }
+
+    // 연관관계 편의 메서드
+    public void initSingUp(Member member) {
+        this.member = member;
+        member.setInitCart(this);
     }
 }

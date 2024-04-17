@@ -6,11 +6,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import supportkim.shoppingmall.domain.member.Member;
+import supportkim.shoppingmall.global.BaseEntity;
 
 @Entity
 @Getter @Builder
 @NoArgsConstructor @AllArgsConstructor
-public class Review {
+public class Review extends BaseEntity {
     @Id @GeneratedValue
     @Column(name = "review_id")
     private Long id;

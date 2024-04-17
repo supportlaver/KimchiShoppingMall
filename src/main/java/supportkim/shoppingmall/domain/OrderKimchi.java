@@ -5,11 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import supportkim.shoppingmall.global.BaseEntity;
 
 @Entity
 @Getter @Builder
 @AllArgsConstructor @NoArgsConstructor
-public class OrderKimchi {
+public class OrderKimchi extends BaseEntity {
 
     @Id @GeneratedValue
     @Column(name="order_kimchi_id")

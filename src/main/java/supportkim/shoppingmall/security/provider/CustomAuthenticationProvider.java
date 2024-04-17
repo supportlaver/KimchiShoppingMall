@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import supportkim.shoppingmall.security.service.CustomMemberDetailsService;
 import supportkim.shoppingmall.security.service.MemberContext;
+import supportkim.shoppingmall.security.token.CustomAuthenticationToken;
 
 @Component
 @NoArgsConstructor
@@ -28,24 +29,21 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     private PasswordEncoder passwordEncoder;
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        log.info("1");
-        log.info("authentication : {}",authentication.getName());
+
         String loginId = authentication.getName();
         String password = (String) authentication.getCredentials();
 
         MemberContext memberContext = (MemberContext) userDetailsService.loadUserByUsername(loginId);
-        log.info("2");
+
 
         if (!passwordEncoder.matches(password,memberContext.getMember().getPassword())){
-            throw new BadCredentialsException("BadCredentialException");
         }
-        log.info("3");
-        return new UsernamePasswordAuthenticationToken(memberContext.getMember(),null, memberContext.getAuthorities());
 
+        return new CustomAuthenticationToken(memberContext.getMember() , null , memberContext.getAuthorities());
     }
     @Override
     public boolean supports(Class<?> authentication) {
-        return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
+        return authentication.equals(CustomAuthenticationToken.class);
     }
 
 }

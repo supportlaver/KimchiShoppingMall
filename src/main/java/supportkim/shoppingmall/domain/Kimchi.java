@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import supportkim.shoppingmall.global.BaseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 @Entity
 @Getter @Builder
 @AllArgsConstructor @NoArgsConstructor
-public class Kimchi {
+public class Kimchi extends BaseEntity {
 
     @Id @GeneratedValue
     @Column(name = "kimchi_id")

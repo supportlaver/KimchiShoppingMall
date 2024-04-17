@@ -1,8 +1,11 @@
 package supportkim.shoppingmall.security.handler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
@@ -11,25 +14,25 @@ import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Component;
+import supportkim.shoppingmall.api.dto.MemberResponseDto;
+import supportkim.shoppingmall.domain.member.Member;
 
 import java.io.IOException;
 
+import static supportkim.shoppingmall.api.dto.MemberResponseDto.*;
+
 @Component
 public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-    private RequestCache requestCache = new HttpSessionRequestCache();
-    private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+    private ObjectMapper om = new ObjectMapper();
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        setDefaultTargetUrl("/");
+        Member member = (Member) authentication.getPrincipal();
 
-        SavedRequest savedRequest = requestCache.getRequest(request, response);
+        response.setStatus(HttpStatus.OK.value());
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-        if (savedRequest!=null) {
-            String redirectUrl = savedRequest.getRedirectUrl();
-            redirectStrategy.sendRedirect(request,response,redirectUrl);
-        } else{
-            redirectStrategy.sendRedirect(request,response,getDefaultTargetUrl());
-        }
-        super.onAuthenticationSuccess(request, response, authentication);
+        Login loginMember = Login.from(member);
+
+        om.writeValue(response.getWriter() , loginMember);
     }
 }

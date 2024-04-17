@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import supportkim.shoppingmall.domain.member.Member;
+import supportkim.shoppingmall.global.BaseEntity;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.List;
 @Table(name = "orders")
 @Builder
 @AllArgsConstructor @NoArgsConstructor
-public class Order {
+public class Order extends BaseEntity {
 
     @Id @GeneratedValue
     @Column(name="order_id")

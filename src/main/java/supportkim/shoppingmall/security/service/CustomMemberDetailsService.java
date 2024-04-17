@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import supportkim.shoppingmall.domain.member.Member;
+import supportkim.shoppingmall.exception.BaseException;
+import supportkim.shoppingmall.exception.ErrorCode;
 import supportkim.shoppingmall.service.MemberService;
 
 import java.util.ArrayList;
@@ -24,7 +26,7 @@ public class CustomMemberDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
         Member member = memberService.findByLoginId(loginId);
         if (member==null) {
-            throw new UsernameNotFoundException("Current LoginId Not Found Exception");
+            throw new BaseException(ErrorCode.NOT_FOUND_MEMBER);
         }
         List<GrantedAuthority> roles = new ArrayList<>();
         roles.add(new SimpleGrantedAuthority(member.getRole().toString()));
