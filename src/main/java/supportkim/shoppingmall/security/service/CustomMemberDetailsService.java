@@ -26,7 +26,7 @@ public class CustomMemberDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
         Member member = memberService.findByLoginId(loginId);
         if (member==null) {
-            throw new BaseException(ErrorCode.NOT_FOUND_MEMBER);
+            throw new BaseException(ErrorCode.NOT_EXIST_MEMBER);
         }
         List<GrantedAuthority> roles = new ArrayList<>();
         roles.add(new SimpleGrantedAuthority(member.getRole().toString()));

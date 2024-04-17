@@ -5,10 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import supportkim.shoppingmall.api.dto.MemberRequestDto;
 import supportkim.shoppingmall.api.dto.MemberResponseDto;
 import supportkim.shoppingmall.domain.member.Member;
@@ -30,11 +27,14 @@ public class MemberController {
         return ResponseEntity.ok(new BaseResponse<>(memberService.signUp(signUpDto)));
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<BaseResponse<String>> login(@RequestBody Login loginDto) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    @GetMapping("/test")
+    public ResponseEntity<String> test() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String loginId = authentication.getName();
+        Member member = memberService.findByLoginId(loginId);
+        log.info("member = {} " , member);
 
-        return ResponseEntity.ok(new BaseResponse<>("ok"));
+        return ResponseEntity.ok("ok");
     }
 
 }

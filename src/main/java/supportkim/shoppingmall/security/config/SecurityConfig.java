@@ -21,6 +21,10 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import supportkim.shoppingmall.jwt.JwtAuthorizationFilter;
+import supportkim.shoppingmall.jwt.JwtService;
+import supportkim.shoppingmall.repository.MemberRepository;
 import supportkim.shoppingmall.security.filter.CustomAuthenticationFilter;
 import supportkim.shoppingmall.security.handler.CustomAccessDeniedHandler;
 import supportkim.shoppingmall.security.handler.CustomAuthenticationFailureHandler;
@@ -36,6 +40,8 @@ public class SecurityConfig {
     private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
     private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
     private final AuthenticationConfiguration authenticationConfiguration;
+    private final JwtService jwtService;
+    private final MemberRepository memberRepository;
 
 
     @Bean
@@ -46,13 +52,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(authRequest -> authRequest
-                        // 상품 조회 , 상품 상세 조회 ,
-                        .requestMatchers("/*","/api/sign-up","/api/login", "/cart").permitAll()
-                        .requestMatchers("/mypage").hasRole("ADMIN")
-                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .anyRequest().authenticated())
+                .authorizeHttpRequests(authRequest -> authRequest.requestMatchers(
+                        new AntPathRequestMatcher("/**")
+                        ).permitAll())
                 .addFilterBefore(authenticationFilter() , UsernamePasswordAuthenticationFilter.class)
+//                .addFilterBefore(jwtAuthorizationFilter() , UsernamePasswordAuthenticationFilter.class)
 //                .exceptionHandling(config -> config.authenticationEntryPoint().accessDeniedHandler())
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable);
@@ -72,4 +76,9 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager() throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
+
+//    @Bean
+//    public JwtAuthorizationFilter jwtAuthorizationFilter() {
+//        return new JwtAuthorizationFilter(jwtService , memberRepository);
+//    }
 }

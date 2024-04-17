@@ -25,9 +25,17 @@ public enum ErrorCode {
     EMPTY_LOGIN_INFO(HttpStatus.NOT_FOUND , "Auth002" , "아이디 또는 비밀번호가 비어있습니다."),
 
     /**
+     * 토큰 에러
+     */
+    TOKEN_NOT_VALID(HttpStatus.FORBIDDEN , "T001" , "토큰이 유효하지 않습니다."),
+    REFRESH_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED , "T002" , "리프레쉬 토큰이 만료됐습니다."),
+
+    /**
      * Member 관련 코드
      */
-    NOT_FOUND_MEMBER(HttpStatus.NOT_FOUND , "M001" , "해당 ID 를 가진 유저를 찾을 수 없습니다.");
+    NOT_EXIST_MEMBER(HttpStatus.NOT_FOUND , "M001" , "해당 유저가 존재하지 않습니다.");
+
+
 
 
     private final HttpStatus status;

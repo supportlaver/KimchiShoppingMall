@@ -43,6 +43,8 @@ public class Member extends BaseEntity {
     @OneToMany
     private List<Coupon> coupons;
 
+    private String refreshToken;
+
     public void setInitCart(Cart cart) {
         this.cart = cart;
     }
@@ -62,5 +64,10 @@ public class Member extends BaseEntity {
 
     public void setPasswordEncoder(String password) {
         this.password = password;
+    }
+
+    // Refresh 토큰 설정
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 }

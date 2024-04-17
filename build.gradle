@@ -38,6 +38,9 @@ dependencies {
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 
 	implementation 'net.nurigo:sdk:4.3.0'
+
+	// JWT
+	implementation 'com.auth0:java-jwt:4.2.1'
 }
 
 tasks.named('test') {
