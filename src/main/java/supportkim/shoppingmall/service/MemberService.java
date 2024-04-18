@@ -1,6 +1,7 @@
 package supportkim.shoppingmall.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import supportkim.shoppingmall.api.dto.MemberRequestDto;
@@ -17,6 +18,7 @@ import static supportkim.shoppingmall.api.dto.MemberRequestDto.*;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MemberService {
 
     private final MemberRepository memberRepository;

@@ -40,32 +40,30 @@ import static supportkim.shoppingmall.api.dto.MemberResponseDto.*;
 @Slf4j
 public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-
+    private ObjectMapper om = new ObjectMapper();
     private final JwtService jwtService;
 
-    private final MemberRepository memberRepository;
+    @Autowired
+    private MemberRepository memberRepository;
 
-    private final EntityManager em;
-    private ObjectMapper om = new ObjectMapper();
     @Override
     @Transactional
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         Member member = (Member) authentication.getPrincipal();
         response.setStatus(HttpStatus.OK.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        TokenMapping token = getToken(member);
-        member.updateRefreshToken(token.getRefreshToken());
-        Login loginMember = Login.from(member,token);
-        om.writeValue(response.getWriter() , loginMember);
-        super.onAuthenticationSuccess(request, response, authentication);
-    }
 
-    /**
-     * 로그인에 성공한 Member 에게 JWT 발급
-     */
-    private TokenMapping getToken(Member member) {
-        String email = member.getEmail();
-        TokenMapping token = jwtService.createToken(email);
-        return token;
+        // 영속성 컨텍스트에 대상을 만들기 위해서 직접 쿼리를 날려 영속성 컨텍스트의 대상이 되도록 만들기
+
+        Member contextMember = memberRepository.findById(member.getId())
+                .orElseThrow(() -> new BaseException(ErrorCode.SUCCESS));
+
+        TokenMapping token = jwtService.createToken(contextMember.getEmail());
+        contextMember.updateRefreshToken(token.getRefreshToken());
+
+        Login loginMember = Login.from(contextMember,token);
+        om.writeValue(response.getWriter() , loginMember);
+
+        super.onAuthenticationSuccess(request, response, authentication);
     }
 }

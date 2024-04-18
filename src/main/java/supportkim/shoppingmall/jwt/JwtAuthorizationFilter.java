@@ -4,10 +4,11 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
+import supportkim.shoppingmall.api.member.MemberController;
 import supportkim.shoppingmall.domain.member.Member;
 import supportkim.shoppingmall.exception.BaseException;
 import supportkim.shoppingmall.exception.ErrorCode;
@@ -17,15 +18,31 @@ import supportkim.shoppingmall.security.token.CustomAuthenticationToken;
 import java.io.IOException;
 import java.util.Optional;
 
-/**
- * OncePerRequestFilter 는 HttpRequest 요청 당 한 번씩 실행
- */
-@RequiredArgsConstructor
 @Slf4j
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
-    private final JwtService jwtService;
-    private final MemberRepository memberRepository;
+    @Autowired
+    private JwtService jwtService;
+
+    @Autowired
+    private MemberRepository memberRepository;
+
+    public JwtAuthorizationFilter(JwtService jwtService, MemberRepository memberRepository) {
+        this.jwtService = jwtService;
+        this.memberRepository = memberRepository;
+    }
+
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        jwtService.extractAccessToken(request)
+                .filter(jwtService::isTokenValid)
+                .ifPresentOrElse(
+                        this::saveAuthentication,
+                        () -> checkRefreshToken(request,response)
+                );
+        filterChain.doFilter(request, response);
+    }
 
     /**
      * accessToken 유효 -> authentication 저장
@@ -33,17 +50,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
      *      refreshToken 유효 -> authentication 저장, accessToken 갱신
      *      refreshToken 만료 -> authentication 저장 X
      */
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
-        jwtService.extractAccessToken(request)
-                .filter(jwtService::isTokenValid)
-                .ifPresentOrElse(
-                        this::saveAuthentication,
-                        () -> checkRefreshToken(request,response)
-                );
-
-    }
 
     private void saveAuthentication(String accessToken) {
         String email = jwtService.extractMemberEmail(accessToken);
@@ -64,13 +70,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             jwtService.setAccessTokenInHeader(response , accessToken);
             saveAuthentication(accessToken);
         } else {
-            doNotSaveAuthentication();
+            doNotSaveAuthentication(request , response);
         }
     }
 
-    private void doNotSaveAuthentication() {
-        /**
-         * 예외처리 추가 해야합니다.
-         */
+    private void doNotSaveAuthentication(HttpServletRequest request , HttpServletResponse response)  {
+
     }
 }
+

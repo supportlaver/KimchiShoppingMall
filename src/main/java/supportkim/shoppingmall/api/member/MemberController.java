@@ -29,11 +29,7 @@ public class MemberController {
 
     @GetMapping("/test")
     public ResponseEntity<String> test() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String loginId = authentication.getName();
-        Member member = memberService.findByLoginId(loginId);
-        log.info("member = {} " , member);
-
+        log.info("testestesteste");
         return ResponseEntity.ok("ok");
     }
 

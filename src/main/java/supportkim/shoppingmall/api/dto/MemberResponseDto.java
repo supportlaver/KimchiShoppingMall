@@ -18,11 +18,11 @@ public class MemberResponseDto {
         private Long id;
         private TokenMapping tokenMapping;
 
-        public static Login from(Member member , TokenMapping tokenMapping) {
+        public static Login from(Member member , TokenMapping token) {
             return Login.builder()
                     .id(member.getId())
+                    .tokenMapping(token)
                     .name(member.getName())
-                    .tokenMapping(tokenMapping)
                     .build();
         }
     }
