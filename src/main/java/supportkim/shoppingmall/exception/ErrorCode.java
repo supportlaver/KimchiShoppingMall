@@ -33,8 +33,12 @@ public enum ErrorCode {
     /**
      * Member 관련 코드
      */
-    NOT_EXIST_MEMBER(HttpStatus.NOT_FOUND , "M001" , "해당 유저가 존재하지 않습니다.");
+    NOT_EXIST_MEMBER(HttpStatus.NOT_FOUND , "M001" , "해당 유저가 존재하지 않습니다."),
 
+    /**
+     * Kimchi 관련 코드
+     */
+    NOT_EXIST_KIMCHI(HttpStatus.NOT_FOUND , "M001" , "해당 김치가 존재하지 않습니다.");
 
 
 
