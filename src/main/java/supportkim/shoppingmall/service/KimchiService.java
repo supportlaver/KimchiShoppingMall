@@ -69,8 +69,7 @@ public class KimchiService {
         String accessToken = jwtService.extractAccessToken(request)
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_EXIST_REFRESH_TOKEN));
         String email = jwtService.extractMemberEmail(accessToken);
-        Member member = memberRepository.findByEmail(email)
+        return memberRepository.findByEmail(email)
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_EXIST_MEMBER));
-        return member;
     }
 }

@@ -19,7 +19,6 @@ import static supportkim.shoppingmall.api.dto.OrderResponseDto.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
-@Slf4j
 public class OrderController {
 
     private final OrderService orderService;
@@ -27,7 +26,6 @@ public class OrderController {
     // 장바구니에서 주문하는 API
     @PostMapping("/order")
     public ResponseEntity<BaseResponse<CompleteOrder>> order(HttpServletRequest request) {
-        log.info("OrderController");
         return ResponseEntity.ok().body(new BaseResponse<>(orderService.order(request)));
 
     }

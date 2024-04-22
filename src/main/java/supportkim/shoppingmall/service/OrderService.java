@@ -22,7 +22,6 @@ import static supportkim.shoppingmall.api.dto.OrderResponseDto.*;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-@Slf4j
 public class OrderService {
 
     private final OrderRepository orderRepository;
@@ -31,9 +30,6 @@ public class OrderService {
 
     @Transactional
     public CompleteOrder order(HttpServletRequest request) {
-
-        log.info("OrderService.order1");
-
         int orderPrice = 0;
 
         Member member = findMemberFromAccessToken(request);
@@ -45,8 +41,6 @@ public class OrderService {
             throw new BaseException(ErrorCode.EMPTY_CART);
         }
 
-        log.info("OrderService.order2");
-
         // 수량 감소 시키기
         for (OrderKimchi orderKimchi : orderKimchis) {
             orderPrice += orderKimchi.getOrderPrice();
@@ -56,7 +50,6 @@ public class OrderService {
         Order order = Order.of(orderKimchis, member , orderPrice);
 
         Order savedOrder = orderRepository.save(order);
-        log.info("OrderService.order3");
 
         return CompleteOrder.of(savedOrder,orderPrice);
     }
@@ -65,9 +58,8 @@ public class OrderService {
         String accessToken = jwtService.extractAccessToken(request)
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_EXIST_ACCESS_TOKEN));
         String email = jwtService.extractMemberEmail(accessToken);
-        Member member = memberRepository.findByEmail(email)
+        return memberRepository.findByEmail(email)
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_EXIST_MEMBER));
-        return member;
     }
 
 }
