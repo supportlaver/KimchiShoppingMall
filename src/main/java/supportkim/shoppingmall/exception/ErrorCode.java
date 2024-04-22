@@ -29,6 +29,8 @@ public enum ErrorCode {
      */
     TOKEN_NOT_VALID(HttpStatus.FORBIDDEN , "T001" , "토큰이 유효하지 않습니다."),
     REFRESH_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED , "T002" , "리프레쉬 토큰이 만료됐습니다."),
+    NOT_EXIST_REFRESH_TOKEN(HttpStatus.NOT_FOUND , "T003" , "헤더에 리프레쉬 토큰이 존재하지 않습니다."),
+    NOT_EXIST_ACCESS_TOKEN(HttpStatus.NOT_FOUND , "T003" , "헤더에 액세스 토큰이 존재하지 않습니다."),
 
     /**
      * Member 관련 코드
@@ -38,7 +40,13 @@ public enum ErrorCode {
     /**
      * Kimchi 관련 코드
      */
-    NOT_EXIST_KIMCHI(HttpStatus.NOT_FOUND , "M001" , "해당 김치가 존재하지 않습니다.");
+    NOT_EXIST_KIMCHI(HttpStatus.NOT_FOUND , "K001" , "해당 김치가 존재하지 않습니다."),
+    OVER_QUANTITY(HttpStatus.BAD_REQUEST , "K001" , "주문 수량을 초과하였습니다."),
+
+    /**
+     * Cart 관련 코드
+     */
+    EMPTY_CART(HttpStatus.NOT_FOUND , "C001" , "장바구니에 상품이 없기 떄문에 주문할 수 없습니다.");
 
 
 

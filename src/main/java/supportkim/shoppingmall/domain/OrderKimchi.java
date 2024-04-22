@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import supportkim.shoppingmall.api.dto.KimchiRequestDto;
+import supportkim.shoppingmall.domain.member.Member;
 import supportkim.shoppingmall.global.BaseEntity;
 
 @Entity
@@ -32,7 +34,21 @@ public class OrderKimchi extends BaseEntity {
     @JoinColumn(name="cart_id")
     private Cart cart;
 
+    public static OrderKimchi of(KimchiRequestDto.KimchiCart kimchiCartDto, Kimchi kimchi , Member member) {
+        return OrderKimchi.builder()
+                .count(kimchiCartDto.getCount())
+                .orderPrice((kimchi.getPrice() * kimchiCartDto.getCount()))
+                .kimchi(kimchi)
+                .cart(member.getCart())
+                .build();
+    }
+
     public void addCount(int count) {
         this.count += count;
+    }
+
+    public void decreaseQuantity(int count) {
+        Kimchi kimchi = this.getKimchi();
+        kimchi.decreaseQuantity(count);
     }
 }

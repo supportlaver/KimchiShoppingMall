@@ -3,6 +3,7 @@ package supportkim.shoppingmall.domain;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import supportkim.shoppingmall.domain.member.Member;
 import supportkim.shoppingmall.global.BaseEntity;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "orders")
-@Builder
+@Builder @Getter
 @AllArgsConstructor @NoArgsConstructor
 public class Order extends BaseEntity {
 
@@ -35,5 +36,17 @@ public class Order extends BaseEntity {
     private OrderStatus orderStatus;
 
     private LocalDateTime orderDate;
+
+    private int orderPrice;
+
+    public static Order of(List<OrderKimchi> orderKimchis , Member member , int orderPrice) {
+
+        return Order.builder()
+                .orderDate(LocalDateTime.now())
+                .orderStatus(OrderStatus.ORDER)
+                .member(member)
+                .orderPrice(orderPrice)
+                .build();
+    }
 
 }

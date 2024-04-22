@@ -3,6 +3,7 @@ package supportkim.shoppingmall.api.dto;
 import lombok.Builder;
 import lombok.Getter;
 import supportkim.shoppingmall.domain.Kimchi;
+import supportkim.shoppingmall.domain.OrderKimchi;
 
 import java.util.List;
 
@@ -18,6 +19,11 @@ public class KimchiResponseDto {
                     .name(kimchi.getName())
                     .build();
         }
+
+        public SingleKimchi(Long id , String name) {
+            this.id = id;
+            this.name = name;
+        }
     }
 
     @Builder @Getter
@@ -27,6 +33,24 @@ public class KimchiResponseDto {
         public static KimchiList from(List<SingleKimchi> kimchiList) {
             return KimchiList.builder()
                     .kimchiList(kimchiList)
+                    .build();
+        }
+    }
+
+    @Builder @Getter
+    public static class CartKimchi {
+        // 장바구니에 담은 김치 종류
+        private String name;
+        // 수량
+        private int count;
+        // 총 가격
+        private int totalPrice;
+
+        public static CartKimchi from(OrderKimchi orderKimchi) {
+            return CartKimchi.builder()
+                    .count(orderKimchi.getCount())
+                    .name(orderKimchi.getKimchi().getName())
+                    .totalPrice(orderKimchi.getOrderPrice())
                     .build();
         }
     }
