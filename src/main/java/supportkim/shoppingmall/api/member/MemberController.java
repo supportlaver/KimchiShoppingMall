@@ -37,10 +37,4 @@ public class MemberController {
         return ResponseEntity.ok(new BaseResponse<>(cartService.getCart(request)));
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<String> test() {
-        log.info("testestesteste");
-        return ResponseEntity.ok("ok");
-    }
-
 }

@@ -27,6 +27,5 @@ public class OrderController {
     @PostMapping("/order")
     public ResponseEntity<BaseResponse<CompleteOrder>> order(HttpServletRequest request) {
         return ResponseEntity.ok().body(new BaseResponse<>(orderService.order(request)));
-
     }
 }

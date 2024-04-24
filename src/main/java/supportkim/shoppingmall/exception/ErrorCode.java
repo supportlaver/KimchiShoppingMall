@@ -42,6 +42,7 @@ public enum ErrorCode {
      */
     NOT_EXIST_KIMCHI(HttpStatus.NOT_FOUND , "K001" , "해당 김치가 존재하지 않습니다."),
     OVER_QUANTITY(HttpStatus.BAD_REQUEST , "K001" , "주문 수량을 초과하였습니다."),
+    NOT_EXIST_KIMCHI_TYPE(HttpStatus.NOT_FOUND , "K003" , "존재하지 않는 김치 타입입니다."),
 
     /**
      * Cart 관련 코드

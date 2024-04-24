@@ -28,6 +28,9 @@ public class InitData {
         initService.radishInitData();
         initService.memberInitData();
         initService.radishSubInitData();
+
+        // 페이징을 위한 데이터 INSERT
+//        initService.manyDataForPaging();
     }
 
     @Component
@@ -117,6 +120,18 @@ public class InitData {
             cart.setInitMember(member);
             cartRepository.save(cart);
             memberRepository.save(member);
+        }
+
+        public void manyDataForPaging() {
+            for (int i = 0; i < 1000; i++) {
+                Kimchi kimchi = Kimchi.builder()
+                        .name("TEST KIMCHI " + i)
+                        .quantity(10)
+                        .price(13000)
+                        .type(KimchiType.Y)
+                        .build();
+                kimchiRepository.save(kimchi);
+            }
         }
     }
 }
