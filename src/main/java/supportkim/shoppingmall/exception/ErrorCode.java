@@ -45,9 +45,19 @@ public enum ErrorCode {
     NOT_EXIST_KIMCHI_TYPE(HttpStatus.NOT_FOUND , "K003" , "존재하지 않는 김치 타입입니다."),
 
     /**
+     * Order 관련 코드
+     */
+    NOT_EXIST_ORDER(HttpStatus.NOT_FOUND , "O001" , "존재하지 않는 주문 입니다."),
+
+    /**
      * Cart 관련 코드
      */
-    EMPTY_CART(HttpStatus.NOT_FOUND , "C001" , "장바구니에 상품이 없기 떄문에 주문할 수 없습니다.");
+    EMPTY_CART(HttpStatus.NOT_FOUND , "C001" , "장바구니에 상품이 없기 떄문에 주문할 수 없습니다."),
+
+    /**
+     * Coupon 관련 코드
+     */
+    ALREADY_USED_COUPON(HttpStatus.BAD_REQUEST , "CP001" , "이미 사용한 쿠폰입니다.");
 
 
 

@@ -2,6 +2,7 @@ package supportkim.shoppingmall.api.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import supportkim.shoppingmall.domain.Coupon;
 import supportkim.shoppingmall.domain.member.Member;
 import supportkim.shoppingmall.jwt.TokenMapping;
 
@@ -10,6 +11,16 @@ public class MemberResponseDto {
     @Builder @Getter
     public static class SignUp {
         private Long memberId;
+        private String couponName;
+        private int couponDiscountValue;
+
+        public static SignUp from(Member member , Coupon coupon) {
+            return SignUp.builder()
+                    .memberId(member.getId())
+                    .couponName(coupon.getDiscountInfo())
+                    .couponDiscountValue(coupon.getDiscountValue())
+                    .build();
+        }
     }
 
     @Builder @Getter

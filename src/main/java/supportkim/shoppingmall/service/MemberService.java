@@ -7,10 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import supportkim.shoppingmall.api.dto.MemberRequestDto;
 import supportkim.shoppingmall.api.dto.MemberResponseDto;
-import supportkim.shoppingmall.domain.Address;
-import supportkim.shoppingmall.domain.Cart;
-import supportkim.shoppingmall.domain.OrderKimchi;
+import supportkim.shoppingmall.domain.*;
 import supportkim.shoppingmall.domain.member.Member;
+import supportkim.shoppingmall.repository.CouponRepository;
 import supportkim.shoppingmall.repository.MemberRepository;
 
 import java.util.List;
@@ -24,6 +23,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CouponRepository couponRepository;
 
     public Member join(Member member) {
         memberRepository.save(member);
@@ -41,14 +41,16 @@ public class MemberService {
      *
      */
 
-    public Long signUp(SignUp signUpDto) {
+    public MemberResponseDto.SignUp signUp(SignUp signUpDto) {
         Address address = Address.of(signUpDto);
         Member member = Member.of(signUpDto, address);
         signUpInitCart(member);
         // 비밀번호 암호화 후 저장
         member.setPasswordEncoder(passwordEncoder.encode(signUpDto.getPassword()));
         Member savedMember = memberRepository.save(member);
-        return savedMember.getId();
+        Coupon coupon = Coupon.signUpCoupon(savedMember);
+        couponRepository.save(coupon);
+        return MemberResponseDto.SignUp.from(member,coupon);
     }
 
     /**

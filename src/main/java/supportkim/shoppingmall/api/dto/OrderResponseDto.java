@@ -20,4 +20,17 @@ public class OrderResponseDto {
                     .build();
         }
     }
+
+    @Builder @Getter
+    public static class ApplyCouponOrder {
+        private Integer discountPrice;
+        private Integer applyCouponPrice;
+
+        public static ApplyCouponOrder of(Integer discountPrice , Integer applyCouponPrice) {
+            return ApplyCouponOrder.builder()
+                    .applyCouponPrice(applyCouponPrice)
+                    .discountPrice(discountPrice)
+                    .build();
+        }
+    }
 }
