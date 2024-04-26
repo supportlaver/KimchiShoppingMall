@@ -48,4 +48,9 @@ public class Kimchi extends BaseEntity {
         }
         this.quantity = quantity - count;
     }
+
+    // 수량 관리 (증가)
+    public void increaseQuantity(int count) {
+        this.quantity = quantity + count;
+    }
 }

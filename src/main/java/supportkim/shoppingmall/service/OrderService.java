@@ -1,7 +1,7 @@
 package supportkim.shoppingmall.service;
 
+import io.micrometer.core.annotation.Counted;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,6 @@ import supportkim.shoppingmall.repository.CouponRepository;
 import supportkim.shoppingmall.repository.MemberRepository;
 import supportkim.shoppingmall.repository.OrderRepository;
 
-import java.util.Iterator;
 import java.util.List;
 
 import static supportkim.shoppingmall.api.dto.OrderResponseDto.*;
@@ -33,6 +32,7 @@ public class OrderService {
     private final JwtService jwtService;
 
     @Transactional
+    @Counted("indicator.order")
     public CompleteOrder order(HttpServletRequest request) {
         int orderPrice = 0;
 
@@ -57,6 +57,21 @@ public class OrderService {
 
         return CompleteOrder.of(savedOrder,orderPrice);
     }
+
+    @Transactional
+    @Counted("indicator.order")
+    public String cancel(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new BaseException(ErrorCode.NOT_EXIST_ORDER));
+        // 수량 다시 복구 시키기
+        List<OrderKimchi> orderKimchis = order.getOrderKimchis();
+        for (OrderKimchi orderKimchi : orderKimchis) {
+            orderKimchi.increaseQuantity(orderKimchi.getCount());
+        }
+        orderRepository.delete(order);
+        return "주문 취소 완료";
+    }
+
 
     @Transactional
     public OrderResponseDto.ApplyCouponOrder applyCoupon(HttpServletRequest request , Long orderId) {
@@ -91,5 +106,4 @@ public class OrderService {
         return memberRepository.findByEmail(email)
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_EXIST_MEMBER));
     }
-
 }

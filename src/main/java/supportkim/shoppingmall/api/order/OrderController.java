@@ -34,4 +34,10 @@ public class OrderController {
                                                              @PathVariable("order-id") Long orderId) {
         return ResponseEntity.ok().body(new BaseResponse<>(orderService.applyCoupon(request, orderId)));
     }
+
+    // 주문 취소 API
+    @PostMapping("/cancel/{order-id}")
+    public ResponseEntity<BaseResponse<String>> orderCancel(@PathVariable("order-id") Long orderId) {
+        return ResponseEntity.ok().body(new BaseResponse<>(orderService.cancel(orderId)));
+    }
 }

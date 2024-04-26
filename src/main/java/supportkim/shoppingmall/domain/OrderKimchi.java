@@ -51,4 +51,11 @@ public class OrderKimchi extends BaseEntity {
         Kimchi kimchi = this.getKimchi();
         kimchi.decreaseQuantity(count);
     }
+
+    public void increaseQuantity(int count) {
+        Kimchi kimchi = this.getKimchi();
+        kimchi.increaseQuantity(count);
+    }
+
+
 }
