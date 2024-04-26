@@ -91,6 +91,17 @@ public class KimchiService {
         return CartKimchi.from(orderKimchi);
     }
 
+    /**
+     * 모니터링을 위한 재고 조회
+     */
+
+    public int getStock() {
+        //todo 이벤트하는 상품들의 PK 값을 미리 정해놓고 여기에 값을 계산해서 반환하는 로직이 필요합니다.
+        // 현재는 1번이라고 가정
+        Optional<Kimchi> findKimchi = kimchiRepository.findById(1L);
+        return findKimchi.get().getQuantity();
+    }
+
     private Member findMemberFromAccessToken(HttpServletRequest request) {
         String accessToken = jwtService.extractAccessToken(request)
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_EXIST_REFRESH_TOKEN));

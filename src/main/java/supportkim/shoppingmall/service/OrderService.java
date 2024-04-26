@@ -59,7 +59,7 @@ public class OrderService {
     }
 
     @Transactional
-    @Counted("indicator.order")
+    @Counted("indicator.cancel")
     public String cancel(Long orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_EXIST_ORDER));
