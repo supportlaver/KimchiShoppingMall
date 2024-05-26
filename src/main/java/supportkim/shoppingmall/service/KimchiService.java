@@ -1,16 +1,14 @@
 package supportkim.shoppingmall.service;
 
+import io.micrometer.core.annotation.Counted;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import supportkim.shoppingmall.api.dto.KimchiRequestDto;
-import supportkim.shoppingmall.api.dto.KimchiResponseDto;
-import supportkim.shoppingmall.domain.Cart;
 import supportkim.shoppingmall.domain.Kimchi;
 import supportkim.shoppingmall.domain.OrderKimchi;
 import supportkim.shoppingmall.domain.member.Member;
@@ -23,7 +21,6 @@ import supportkim.shoppingmall.repository.OrderKimchiRepository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static supportkim.shoppingmall.api.dto.KimchiResponseDto.*;
 
@@ -39,9 +36,11 @@ public class KimchiService {
     private final JwtService jwtService;
 
     // 단건 조회
+    @Counted("indicator.kimchi")
     public SingleKimchi findOne(Long kimchiId) {
         Kimchi kimchi = kimchiRepository.findById(kimchiId)
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_EXIST_KIMCHI));
+        
         return SingleKimchi.from(kimchi);
     }
 
@@ -76,7 +75,11 @@ public class KimchiService {
 
     @Transactional
     public CartKimchi addCart(KimchiRequestDto.KimchiCart kimchiCartDto, Long kimchiId , HttpServletRequest request) {
+
+
+
         Member member = findMemberFromAccessToken(request);
+        log.info("현재 {} 가 장바구니에 김치를 담았습니다." , member.getName());
 
         Kimchi kimchi = kimchiRepository.findById(kimchiId)
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_EXIST_KIMCHI));
@@ -95,7 +98,7 @@ public class KimchiService {
      * 모니터링을 위한 재고 조회
      */
 
-    public int getStock() {
+    public Integer getStock() {
         //todo 이벤트하는 상품들의 PK 값을 미리 정해놓고 여기에 값을 계산해서 반환하는 로직이 필요합니다.
         // 현재는 1번이라고 가정
         Optional<Kimchi> findKimchi = kimchiRepository.findById(1L);

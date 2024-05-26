@@ -5,12 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import supportkim.shoppingmall.domain.Cart;
-import supportkim.shoppingmall.domain.Kimchi;
-import supportkim.shoppingmall.domain.KimchiType;
+import supportkim.shoppingmall.domain.*;
 import supportkim.shoppingmall.domain.member.Member;
 import supportkim.shoppingmall.domain.member.Role;
 import supportkim.shoppingmall.repository.CartRepository;
+import supportkim.shoppingmall.repository.CouponRepository;
 import supportkim.shoppingmall.repository.KimchiRepository;
 import supportkim.shoppingmall.repository.MemberRepository;
 
@@ -19,16 +18,19 @@ import supportkim.shoppingmall.repository.MemberRepository;
 public class InitData {
 
     private final InitService initService;
+    private final KimchiRepository kimchiRepository;
 
     @PostConstruct
     public void init(){
-        initService.baeChuInitData();
-        initService.yeolMuInitData();
-        initService.greenOnionInitData();
-        initService.radishInitData();
-        initService.memberInitData();
-        initService.radishSubInitData();
-
+        if (kimchiRepository.findAll().size() == 0) {
+            initService.baeChuInitData();
+            initService.yeolMuInitData();
+            initService.greenOnionInitData();
+            initService.radishInitData();
+            initService.memberInitData();
+            initService.radishSubInitData();
+            initService.initCouponForNego();
+        }
         // 페이징을 위한 데이터 INSERT
 //        initService.manyDataForPaging();
     }
@@ -42,6 +44,7 @@ public class InitData {
         private final MemberRepository memberRepository;
         private final CartRepository cartRepository;
         private final PasswordEncoder passwordEncoder;
+        private final CouponRepository couponRepository;
 
         public void baeChuInitData() {
             Kimchi baeChu1 = Kimchi.builder()
@@ -122,16 +125,17 @@ public class InitData {
             memberRepository.save(member);
         }
 
-        public void manyDataForPaging() {
-            for (int i = 0; i < 1000; i++) {
-                Kimchi kimchi = Kimchi.builder()
-                        .name("TEST KIMCHI " + i)
-                        .quantity(10)
-                        .price(13000)
-                        .type(KimchiType.Y)
-                        .build();
-                kimchiRepository.save(kimchi);
-            }
+        /**
+         * 네고왕 전용 쿠폰 초기화 -> 100장
+         */
+        public void initCouponForNego() {
+            Coupon coupon = Coupon.builder()
+                    .couponStatus(CouponStatus.afterUSED)
+                    .discountValue(77)
+                    .discountInfo("네고왕 기념 :: 모든 김치 77% 할인 쿠폰")
+                    .quantity(1000)
+                    .build();
+            couponRepository.save(coupon);
         }
     }
 }

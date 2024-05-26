@@ -2,12 +2,14 @@ package supportkim.shoppingmall.api.kimchi;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import supportkim.shoppingmall.api.dto.KimchiRequestDto;
 import supportkim.shoppingmall.api.dto.KimchiResponseDto;
 import supportkim.shoppingmall.global.BaseResponse;
+import supportkim.shoppingmall.service.CouponService;
 import supportkim.shoppingmall.service.KimchiService;
 
 import static supportkim.shoppingmall.api.dto.KimchiRequestDto.*;
@@ -16,9 +18,11 @@ import static supportkim.shoppingmall.api.dto.KimchiResponseDto.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
+@Slf4j
 public class KimchiController {
 
     private final KimchiService kimchiService;
+    private final CouponService couponService;
 
     // 단건 조회 API
     @GetMapping("/kimchi/{kimchi-id}")
@@ -47,6 +51,19 @@ public class KimchiController {
     public ResponseEntity<BaseResponse<CartKimchi>> addCart(@RequestBody KimchiCart kimchiCartDto,
                                                             @PathVariable("kimchi-id") Long kimchiId,
                                                             HttpServletRequest request) {
+        log.info("장바구니 담는 API 호출");
         return ResponseEntity.ok().body(new BaseResponse<>(kimchiService.addCart(kimchiCartDto , kimchiId, request)));
+    }
+
+    // 수량 확인 API
+    @GetMapping("/kimchi-quantity/1")
+    public ResponseEntity<BaseResponse<Integer>> getKimchiQuantity() {
+        return ResponseEntity.ok().body(new BaseResponse<>(kimchiService.getStock()));
+    }
+
+    // 쿠폰 수량 확인 API (테스트용)
+    @GetMapping("/coupon-quantity/1")
+    public ResponseEntity<BaseResponse<Integer>> getCouponQuantity() {
+        return ResponseEntity.ok().body(new BaseResponse<>(couponService.getCouponStock()));
     }
 }

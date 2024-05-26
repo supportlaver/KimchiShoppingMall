@@ -57,5 +57,9 @@ public class OrderKimchi extends BaseEntity {
         kimchi.increaseQuantity(count);
     }
 
+    public void forTestInitKimchi(Kimchi kimchi) {
+        this.kimchi = kimchi;
+    }
+
 
 }

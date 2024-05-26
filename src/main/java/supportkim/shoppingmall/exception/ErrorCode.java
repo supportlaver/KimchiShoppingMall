@@ -57,7 +57,9 @@ public enum ErrorCode {
     /**
      * Coupon 관련 코드
      */
-    ALREADY_USED_COUPON(HttpStatus.BAD_REQUEST , "CP001" , "이미 사용한 쿠폰입니다.");
+    ALREADY_USED_COUPON(HttpStatus.BAD_REQUEST , "CP001" , "이미 사용한 쿠폰입니다."),
+    NOT_EXIST_COUPON(HttpStatus.NOT_FOUND, "CP002" , "존재하지 않는 쿠폰입니다."),
+    EXCEEDED_QUANTITY_COUPON(HttpStatus.BAD_REQUEST, "CP003" , "해당 쿠폰은 매진됐습니다. (수량초과)");
 
 
 

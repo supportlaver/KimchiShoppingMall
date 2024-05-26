@@ -53,4 +53,8 @@ public class Cart extends BaseEntity {
         this.member = member;
         member.setInitCart(this);
     }
+
+    public void forTestInitKimchi(List<OrderKimchi> cartItems) {
+        this.cartItems = cartItems;
+    }
 }

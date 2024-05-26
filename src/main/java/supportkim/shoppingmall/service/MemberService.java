@@ -48,7 +48,7 @@ public class MemberService {
         // 비밀번호 암호화 후 저장
         member.setPasswordEncoder(passwordEncoder.encode(signUpDto.getPassword()));
         Member savedMember = memberRepository.save(member);
-        Coupon coupon = Coupon.signUpCoupon(savedMember);
+        Coupon coupon = Coupon.signUpCoupon();
         couponRepository.save(coupon);
         return MemberResponseDto.SignUp.from(member,coupon);
     }

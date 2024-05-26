@@ -39,8 +39,6 @@ public class SecurityConfig {
     @Autowired
     private MemberRepository memberRepository;
 
-    @Autowired
-    private MemberController memberController;
 
 
     @Bean

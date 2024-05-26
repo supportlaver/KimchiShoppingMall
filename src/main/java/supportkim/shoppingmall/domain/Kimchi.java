@@ -53,4 +53,9 @@ public class Kimchi extends BaseEntity {
     public void increaseQuantity(int count) {
         this.quantity = quantity + count;
     }
+
+    public void forTestInitQuantityOrName(String name , int quantity) {
+        this.name = name;
+        this.quantity = quantity;
+    }
 }

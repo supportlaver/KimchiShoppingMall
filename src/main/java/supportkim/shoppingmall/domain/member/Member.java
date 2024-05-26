@@ -37,7 +37,7 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     private Cart cart;
 
     @OneToMany
@@ -69,5 +69,9 @@ public class Member extends BaseEntity {
     // Refresh 토큰 설정
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    public void forTestInitMemberName(String name) {
+        this.name = name;
     }
 }

@@ -43,5 +43,6 @@ public class CouponResponseDto {
             this.discountValue = c.getDiscountValue();
             this.discountInfo = c.getDiscountInfo();
         }
+
     }
 }
