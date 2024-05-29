@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import supportkim.shoppingmall.domain.Kimchi;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface KimchiRepository extends JpaRepository<Kimchi , Long> {
 
@@ -23,7 +24,7 @@ public interface KimchiRepository extends JpaRepository<Kimchi , Long> {
     @Query("select k from Kimchi as k where k.type='GO' ")
     public List<Kimchi> findAllGreenOnion();
 
-    Kimchi findByName(String name);
+    Optional<Kimchi> findByName(String name);
 
 //    public List<Kimchi> findAll();
 

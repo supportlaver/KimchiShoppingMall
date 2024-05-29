@@ -24,10 +24,16 @@ public class KimchiController {
     private final KimchiService kimchiService;
     private final CouponService couponService;
 
-    // 단건 조회 API
+    // 단건 조회 API by PK
     @GetMapping("/kimchi/{kimchi-id}")
-    public ResponseEntity<BaseResponse<SingleKimchi>> getKimchi(@PathVariable("kimchi-id") Long kimchiId) {
-        return ResponseEntity.ok().body(new BaseResponse<>(kimchiService.findOne(kimchiId)));
+    public ResponseEntity<BaseResponse<SingleKimchi>> getKimchiByPK(@PathVariable("kimchi-id") Long kimchiId) {
+        return ResponseEntity.ok().body(new BaseResponse<>(kimchiService.findOneByPK(kimchiId)));
+    }
+
+    // 단건 조회 API by Name
+    @GetMapping("/kimchi")
+    public ResponseEntity<BaseResponse<SingleKimchi>> getKimchiByKimchiName(@RequestParam("kimchi-name") String kimchiName) {
+        return ResponseEntity.ok().body(new BaseResponse<>(kimchiService.findOneByName(kimchiName)));
     }
 
     // 모두 조회 API

@@ -37,10 +37,18 @@ public class KimchiService {
 
     // 단건 조회
     @Counted("indicator.kimchi")
-    public SingleKimchi findOne(Long kimchiId) {
+    public SingleKimchi findOneByPK(Long kimchiId) {
         Kimchi kimchi = kimchiRepository.findById(kimchiId)
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_EXIST_KIMCHI));
         
+        return SingleKimchi.from(kimchi);
+    }
+
+    @Counted("indicator.kimchi.name")
+    public SingleKimchi findOneByName(String kimchiName) {
+        Kimchi kimchi = kimchiRepository.findByName(kimchiName)
+                .orElseThrow(() -> new BaseException(ErrorCode.NOT_EXIST_KIMCHI));
+
         return SingleKimchi.from(kimchi);
     }
 
