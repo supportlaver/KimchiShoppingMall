@@ -9,8 +9,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.util.TimeZone;
 
-@EnableJpaAuditing
 @SpringBootApplication
+@EnableJpaAuditing
 @ComponentScan(excludeFilters = @ComponentScan.Filter(type = FilterType.REGEX, pattern = "supportkim.shoppingmall.web.*"))
 public class KoreaKimchiApplication {
 
