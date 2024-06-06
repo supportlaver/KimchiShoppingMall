@@ -30,7 +30,7 @@ public class InitData {
             initService.memberInitData();
             initService.radishSubInitData();
             initService.initCouponForNego();
-            initService.manyDataInit();
+            // initService.manyDataInit();
         }
         // 페이징을 위한 데이터 INSERT
 //        initService.manyDataForPaging();

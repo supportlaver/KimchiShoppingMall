@@ -54,7 +54,8 @@ public class SecurityConfig {
                         ).permitAll())
                 // 앞에 있는게 뒤에 오는거 Before/After
                 .addFilterBefore(authenticationFilter() , UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(myJwtFilter() , CustomAuthenticationFilter.class)
+                // API Gateway 에서 토큰 검증
+                // .addFilterAfter(myJwtFilter() , CustomAuthenticationFilter.class)
 //                .exceptionHandling(config -> config.authenticationEntryPoint().accessDeniedHandler())
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable);
