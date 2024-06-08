@@ -30,7 +30,7 @@ public class InitData {
             initService.memberInitData();
             initService.radishSubInitData();
             initService.initCouponForNego();
-            // initService.manyDataInit();
+            initService.manyDataInit();
         }
         // 페이징을 위한 데이터 INSERT
 //        initService.manyDataForPaging();
@@ -140,7 +140,7 @@ public class InitData {
         }
 
         public void manyDataInit() {
-            for (int i = 0; i < 60000; i++) {
+            for (int i = 0; i < 10000; i++) {
                 Kimchi kimchi = Kimchi.builder()
                         .name("manyKimchi" + i)
                         .quantity(100)

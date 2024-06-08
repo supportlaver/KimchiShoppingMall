@@ -1,6 +1,8 @@
 package supportkim.shoppingmall.repository;
 
+import com.netflix.discovery.converters.Auto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
@@ -8,13 +10,10 @@ import org.springframework.stereotype.Repository;
 import java.time.Duration;
 
 @Component
+@RequiredArgsConstructor
 public class RedisLockRepository {
 
-    private RedisTemplate<String , String> redisTemplate;
-
-    public RedisLockRepository(RedisTemplate<String, String> redisTemplate) {
-        this.redisTemplate = redisTemplate;
-    }
+    private final RedisTemplate<String , String> redisTemplate;
 
     // 로직 실행 시 lock
     public Boolean lock(Long key) {

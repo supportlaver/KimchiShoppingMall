@@ -1,17 +1,25 @@
 config:
-  target: 'http://localhost:8080'
+  target: 'http://13.125.68.83:8080'
   phases:
     - duration: 10
-      arrivalRate: 3
-      name: Warm up
-    - duration: 1
-      arrivalCount: 1000
-      name: Burst Load
-    - duration: 60
-      arrivalRate: 1000
-      name: Sustained Load
-
+      arrivalRate: 25
+      name: Warm up - 1
+    - duration: 30
+      arrivalRate: 10
+      rampTo: 150
+      name: Burst Load - 2(점점 트래픽 증가)
+      # 부하 유지
+    - duration: 30
+      arrivalRate: 150
+      name: Sustained Load - 3
+      # 부하를 점점 줄이기
+    - duration: 20
+      arrivalRate: 25
+      rampTo: 50
+      name: End of load - 4
 scenarios:
   - flow:
       - get:
-          url: "/api/kimchi/1"
+          url: "/api/kimchi?kimchi-name=네고왕김치"
+          headers:
+            authorization: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsInN1YmplY3QiOiJKSVdPTkBuYXZlci5jb20iLCJleHAiOjE4MTc4MzQ2Mjh9.XDnrM5kg2tU44oqAFGsphmrFe3QYrt4pqeJYFR6SNZ7e-4Tq0qV7FXhZNewrdkBS0fitJxp0qpzf1cc-byrEew'
