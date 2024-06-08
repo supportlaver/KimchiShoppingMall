@@ -19,7 +19,7 @@ public class SampleController {
 
     @GetMapping("/current-port")
     public String sample() {
-        String curPortInfo = " 현재 Port = ";
+        String curPortInfo = " 현재 Port : ";
         String property = env.getProperty("local.server.port");
         curPortInfo+=property;
         log.info("port = {} " , env.getProperty("local.server.port"));
