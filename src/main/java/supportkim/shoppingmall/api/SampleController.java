@@ -22,6 +22,6 @@ public class SampleController {
 
         log.info("port = {} " , env.getProperty("local.server.port"));
 
-        return "ok2";
+        return "ok3";
     }
 }

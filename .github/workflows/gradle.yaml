@@ -1,4 +1,4 @@
-name: CI with Malang
+name: kimchi-mall
 
 on:
   push:
