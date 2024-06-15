@@ -1,0 +1,43 @@
+package supportkim.shoppingmall.repository;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Repository;
+import supportkim.shoppingmall.api.dto.KimchiRequestDto;
+import supportkim.shoppingmall.api.dto.KimchiResponseDto;
+
+import java.time.Duration;
+import java.util.Optional;
+
+import static supportkim.shoppingmall.api.dto.KimchiResponseDto.*;
+
+@Repository
+@RequiredArgsConstructor
+@Slf4j
+public class KimchiCacheRepository {
+
+    private final RedisTemplate<String , SingleKimchi> kimchiRedisTemplate;
+
+    // TTL 걸어주기 (사용하지 않는 캐시 데이터 삭제)
+    private final static Duration KIMCHI_CACHE_TTL = Duration.ofDays(3);
+
+    public void setKimchi(SingleKimchi kimchi) {
+        log.info("kimchi name = {} " , kimchi.getName());
+        String key = getKey(kimchi.getName());
+        kimchiRedisTemplate.opsForValue().set(key,kimchi,KIMCHI_CACHE_TTL);
+    }
+
+    public Optional<SingleKimchi> getKimchi(String name) {
+        SingleKimchi kimchi = kimchiRedisTemplate.opsForValue().get(getKey(name));
+        return Optional.ofNullable(kimchi);
+    }
+
+    public void deleteKimchi(String name) {
+        kimchiRedisTemplate.delete(getKey(name));
+    }
+
+    public String getKey(String name) {
+        return "KIMCHI:" + name;
+    }
+}

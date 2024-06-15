@@ -9,12 +9,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import supportkim.shoppingmall.api.dto.KimchiRequestDto;
+import supportkim.shoppingmall.api.dto.MemberRequestDto;
 import supportkim.shoppingmall.domain.Kimchi;
 import supportkim.shoppingmall.domain.OrderKimchi;
 import supportkim.shoppingmall.domain.member.Member;
 import supportkim.shoppingmall.exception.BaseException;
 import supportkim.shoppingmall.exception.ErrorCode;
 import supportkim.shoppingmall.jwt.JwtService;
+import supportkim.shoppingmall.repository.KimchiCacheRepository;
 import supportkim.shoppingmall.repository.KimchiRepository;
 import supportkim.shoppingmall.repository.MemberRepository;
 import supportkim.shoppingmall.repository.OrderKimchiRepository;
@@ -31,6 +33,7 @@ import static supportkim.shoppingmall.api.dto.KimchiResponseDto.*;
 public class KimchiService {
 
     private final KimchiRepository kimchiRepository;
+    private final KimchiCacheRepository kimchiRedisRepository;
     private final MemberRepository memberRepository;
     private final OrderKimchiRepository orderKimchiRepository;
     private final JwtService jwtService;
@@ -40,12 +43,26 @@ public class KimchiService {
     public SingleKimchi findOneByPK(Long kimchiId) {
         Kimchi kimchi = kimchiRepository.findById(kimchiId)
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_EXIST_KIMCHI));
-        
         return SingleKimchi.from(kimchi);
     }
 
+    // 캐시 적용 (By Name)
     @Counted("indicator.kimchi.name")
-    public SingleKimchi findOneByName(String kimchiName) {
+    public SingleKimchi findOneByNameWithCache(String kimchiName) {
+        Optional<SingleKimchi> cacheKimchi = kimchiRedisRepository.getKimchi(kimchiName);
+
+        if (cacheKimchi.isEmpty()) {
+            Kimchi kimchi = kimchiRepository.findByName(kimchiName)
+                    .orElseThrow(() -> new BaseException(ErrorCode.NOT_EXIST_KIMCHI));
+            return SingleKimchi.from(kimchi);
+        } else {
+            return cacheKimchi.get();
+        }
+    }
+
+    // 캐시 적용 전 (By Name)
+    @Counted("indicator.kimchi.name")
+    public SingleKimchi findOneByNameNoCache(String kimchiName) {
         Kimchi kimchi = kimchiRepository.findByName(kimchiName)
                 .orElseThrow(() -> new BaseException(ErrorCode.NOT_EXIST_KIMCHI));
 
@@ -83,9 +100,6 @@ public class KimchiService {
 
     @Transactional
     public CartKimchi addCart(KimchiRequestDto.KimchiCart kimchiCartDto, Long kimchiId , HttpServletRequest request) {
-
-
-
         Member member = findMemberFromAccessToken(request);
         log.info("현재 {} 가 장바구니에 김치를 담았습니다." , member.getName());
 

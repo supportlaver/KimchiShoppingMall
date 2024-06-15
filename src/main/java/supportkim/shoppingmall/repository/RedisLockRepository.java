@@ -1,6 +1,6 @@
 package supportkim.shoppingmall.repository;
 
-import com.netflix.discovery.converters.Auto;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;

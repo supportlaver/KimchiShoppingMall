@@ -12,8 +12,17 @@ import org.springframework.data.redis.connection.RedisConfiguration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import supportkim.shoppingmall.api.dto.KimchiRequestDto;
+import supportkim.shoppingmall.api.dto.KimchiResponseDto;
+import supportkim.shoppingmall.api.dto.MemberResponseDto;
 import supportkim.shoppingmall.api.facade.RedissonLockQuantityFacade;
+import supportkim.shoppingmall.domain.Kimchi;
+
+import static supportkim.shoppingmall.api.dto.KimchiRequestDto.*;
+import static supportkim.shoppingmall.api.dto.KimchiResponseDto.*;
+import static supportkim.shoppingmall.api.dto.MemberResponseDto.*;
 
 @Configuration
 @RequiredArgsConstructor
@@ -31,13 +40,24 @@ public class RedisConfig {
         return new LettuceConnectionFactory(redisProperties.getHost() , redisProperties.getPort());
     }
 
+    // Kimchi 를 캐시하기 위한 Template
+    // 이 부분하고 User 도 캐시하기
     @Bean
-    @Primary
-    public RedisTemplate<String , Object> redisTemplate() {
-        RedisTemplate<String , Object> redisTemplate = new RedisTemplate<>();
+    public RedisTemplate<String , SingleKimchi> kimchiRedisTemplate() {
+        RedisTemplate<String , SingleKimchi> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
         redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(SingleKimchi.class));
+        return redisTemplate;
+    }
+
+    // Member 를 캐시하기 위한 Template
+    @Bean
+    public RedisTemplate<String , SingleMember> memberRedisTemplate() {
+        RedisTemplate<String , SingleMember> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(redisConnectionFactory());
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(SingleMember.class));
         return redisTemplate;
     }
 

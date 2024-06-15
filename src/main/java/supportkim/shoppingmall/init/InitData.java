@@ -30,7 +30,8 @@ public class InitData {
             initService.memberInitData();
             initService.radishSubInitData();
             initService.initCouponForNego();
-            // initService.manyDataInit();
+            initService.manyDataInitKimchi();
+            initService.manyDataInitMember();
         }
         // 페이징을 위한 데이터 INSERT
 //        initService.manyDataForPaging();
@@ -139,14 +140,24 @@ public class InitData {
             couponRepository.save(coupon);
         }
 
-        public void manyDataInit() {
-            for (int i = 0; i < 10000; i++) {
+        public void manyDataInitKimchi() {
+            for (int i = 0; i < 60000; i++) {
                 Kimchi kimchi = Kimchi.builder()
                         .name("manyKimchi" + i)
                         .quantity(100)
                         .price(15000)
                         .build();
                 kimchiRepository.save(kimchi);
+            }
+        }
+
+        public void manyDataInitMember() {
+            for (int i = 0; i < 10000; i++) {
+                Member member = Member.builder()
+                        .name("manyMember" + i)
+                        .email("manyMember@" + i)
+                        .build();
+                memberRepository.save(member);
             }
         }
     }

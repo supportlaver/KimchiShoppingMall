@@ -33,7 +33,7 @@ public class KimchiController {
     // 단건 조회 API by Name
     @GetMapping("/kimchi")
     public ResponseEntity<BaseResponse<SingleKimchi>> getKimchiByKimchiName(@RequestParam("kimchi-name") String kimchiName) {
-        return ResponseEntity.ok().body(new BaseResponse<>(kimchiService.findOneByName(kimchiName)));
+        return ResponseEntity.ok().body(new BaseResponse<>(kimchiService.findOneByNameWithCache(kimchiName)));
     }
 
     // 모두 조회 API

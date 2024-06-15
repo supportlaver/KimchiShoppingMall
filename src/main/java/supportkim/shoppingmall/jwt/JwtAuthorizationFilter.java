@@ -7,16 +7,21 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.filter.OncePerRequestFilter;
+import supportkim.shoppingmall.api.dto.MemberResponseDto;
 import supportkim.shoppingmall.api.member.MemberController;
 import supportkim.shoppingmall.domain.member.Member;
 import supportkim.shoppingmall.exception.BaseException;
 import supportkim.shoppingmall.exception.ErrorCode;
+import supportkim.shoppingmall.repository.MemberCacheRepository;
 import supportkim.shoppingmall.repository.MemberRepository;
 import supportkim.shoppingmall.security.token.CustomAuthenticationToken;
 
 import java.io.IOException;
 import java.util.Optional;
+
+import static supportkim.shoppingmall.api.dto.MemberResponseDto.*;
 
 @Slf4j
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
@@ -26,6 +31,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     @Autowired
     private MemberRepository memberRepository;
+    @Autowired
+    private MemberCacheRepository memberCacheRepository;
 
     public JwtAuthorizationFilter(JwtService jwtService, MemberRepository memberRepository) {
         this.jwtService = jwtService;
@@ -51,10 +58,29 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
      *      refreshToken 만료 -> authentication 저장 X
      */
 
+
     private void saveAuthentication(String accessToken) {
         String email = jwtService.extractMemberEmail(accessToken);
-        Member member = memberRepository.findByEmail(email)
-                .orElseThrow(() -> new BaseException(ErrorCode.NOT_EXIST_MEMBER));
+
+
+        Member member = null;
+
+        /**
+         * 캐시에서 먼저 확인 후 없으면 DB 에서 가져오기
+         * 로그인 할 때 처음에는 캐시에 없기 떄문에 DB 에서 가지고 온다.
+         */
+
+
+        Optional<SingleMember> findMember = memberCacheRepository.getMember(email);
+        if (findMember.isEmpty()) {
+            member = memberRepository.findByEmail(email)
+                    .orElseThrow(() -> new BaseException(ErrorCode.NOT_EXIST_MEMBER));
+
+        } else {
+            SingleMember singleMember = findMember.get();
+            member = SingleMember.fromMemberEntity(singleMember.getMemberId(), singleMember.getName(), singleMember.getName());
+        }
+
         CustomAuthenticationToken token = new CustomAuthenticationToken(member, null);
         SecurityContextHolder.getContext().setAuthentication(token);
     }

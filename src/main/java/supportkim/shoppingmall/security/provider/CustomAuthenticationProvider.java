@@ -35,8 +35,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         MemberContext memberContext = (MemberContext) userDetailsService.loadUserByUsername(loginId);
 
-        log.info("인증 중1");
-
 
         if (!passwordEncoder.matches(password,memberContext.getMember().getPassword())){
         }

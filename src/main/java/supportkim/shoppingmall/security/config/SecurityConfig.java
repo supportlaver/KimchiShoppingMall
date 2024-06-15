@@ -55,8 +55,8 @@ public class SecurityConfig {
                 // 앞에 있는게 뒤에 오는거 Before/After
                 .addFilterBefore(authenticationFilter() , UsernamePasswordAuthenticationFilter.class)
                 // API Gateway 에서 토큰 검증
-                // .addFilterAfter(myJwtFilter() , CustomAuthenticationFilter.class)
-//                .exceptionHandling(config -> config.authenticationEntryPoint().accessDeniedHandler())
+                 .addFilterAfter(myJwtFilter() , CustomAuthenticationFilter.class)
+                //.exceptionHandling(config -> config.authenticationEntryPoint().accessDeniedHandler())
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable);
         return http.build();
@@ -76,10 +76,10 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-//    @Bean
-//    public JwtAuthorizationFilter jwtAuthorizationFilter() throws Exception {
-//        return new JwtAuthorizationFilter(authenticationManager(),jwtService , memberRepository);
-//    }
+    @Bean
+    public JwtAuthorizationFilter jwtAuthorizationFilter() throws Exception {
+        return new JwtAuthorizationFilter(jwtService , memberRepository);
+    }
 
     @Bean
     public JwtAuthorizationFilter myJwtFilter() {

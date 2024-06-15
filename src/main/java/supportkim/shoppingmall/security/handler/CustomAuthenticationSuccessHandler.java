@@ -26,6 +26,7 @@ import supportkim.shoppingmall.exception.BaseException;
 import supportkim.shoppingmall.exception.ErrorCode;
 import supportkim.shoppingmall.jwt.JwtService;
 import supportkim.shoppingmall.jwt.TokenMapping;
+import supportkim.shoppingmall.repository.MemberCacheRepository;
 import supportkim.shoppingmall.repository.MemberRepository;
 import supportkim.shoppingmall.security.service.MemberContext;
 import supportkim.shoppingmall.security.token.CustomAuthenticationToken;
@@ -45,6 +46,7 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     @Autowired
     private MemberRepository memberRepository;
+    private final MemberCacheRepository memberCacheRepository;
 
     @Override
     @Transactional
@@ -55,6 +57,8 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         // 영속성 컨텍스트에 대상을 만들기 위해서 직접 쿼리를 날려 영속성 컨텍스트의 대상이 되도록 만들기
 
+
+
         Member contextMember = memberRepository.findById(member.getId())
                 .orElseThrow(() -> new BaseException(ErrorCode.SUCCESS));
 
@@ -62,6 +66,14 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         contextMember.updateRefreshToken(token.getRefreshToken());
 
         Login loginMember = Login.from(contextMember,token);
+
+        /**
+         * 로그인 성공시 캐시에 저장
+         */
+
+        memberCacheRepository.setMember(SingleMember
+                .from(member.getId(),member.getName(),member.getEmail()));
+
         om.writeValue(response.getWriter() , loginMember);
 
         super.onAuthenticationSuccess(request, response, authentication);

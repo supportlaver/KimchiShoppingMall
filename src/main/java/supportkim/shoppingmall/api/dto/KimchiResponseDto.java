@@ -1,5 +1,8 @@
 package supportkim.shoppingmall.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Builder;
 import lombok.Getter;
 import supportkim.shoppingmall.domain.Kimchi;
@@ -20,7 +23,8 @@ public class KimchiResponseDto {
                     .build();
         }
 
-        public SingleKimchi(Long id , String name) {
+        @JsonCreator
+        public SingleKimchi(@JsonProperty("id") Long id , @JsonProperty("name") String name) {
             this.id = id;
             this.name = name;
         }
