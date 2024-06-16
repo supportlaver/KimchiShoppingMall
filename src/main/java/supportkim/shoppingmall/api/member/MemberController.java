@@ -5,16 +5,19 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import supportkim.shoppingmall.api.dto.AlarmResponseDto;
 import supportkim.shoppingmall.api.dto.MemberResponseDto;
 import supportkim.shoppingmall.api.facade.LettuceLockQuantityFacade;
 import supportkim.shoppingmall.api.facade.NamedLockQuantityFacade;
 import supportkim.shoppingmall.api.facade.OptimisticLockQuantityFacade;
 import supportkim.shoppingmall.api.facade.RedissonLockQuantityFacade;
 import supportkim.shoppingmall.global.BaseResponse;
+import supportkim.shoppingmall.service.AlarmService;
 import supportkim.shoppingmall.service.CartService;
 import supportkim.shoppingmall.service.CouponService;
 import supportkim.shoppingmall.service.MemberService;
 
+import static supportkim.shoppingmall.api.dto.AlarmResponseDto.*;
 import static supportkim.shoppingmall.api.dto.CartResponseDto.*;
 import static supportkim.shoppingmall.api.dto.CouponResponseDto.*;
 import static supportkim.shoppingmall.api.dto.MemberRequestDto.*;
@@ -28,14 +31,20 @@ public class MemberController {
     private final MemberService memberService;
     private final CartService cartService;
     private final CouponService couponService;
+    private final AlarmService alarmService;
     private final OptimisticLockQuantityFacade optimisticLockStockFacade;
     private final NamedLockQuantityFacade namedLockStockFacade;
     private final LettuceLockQuantityFacade lettuceLockStockFacade;
     private final RedissonLockQuantityFacade redissonLockQuantityFacade;
 
-    @PostMapping("/sign-up")
+    // @PostMapping("/sign-up")
     public ResponseEntity<BaseResponse<MemberResponseDto.SignUp>> signUp(@RequestBody SignUp signUpDto) {
         return ResponseEntity.ok(new BaseResponse<>(memberService.signUp(signUpDto)));
+    }
+
+    @PostMapping("/sign-up")
+    public ResponseEntity<BaseResponse<MemberResponseDto.SignUpWithAlarm>> signUpWithAlarm(@RequestBody SignUp signUpDto) {
+        return ResponseEntity.ok(new BaseResponse<>(memberService.signUpWithAlarm(signUpDto)));
     }
 
     @GetMapping("/cart")
@@ -46,6 +55,11 @@ public class MemberController {
     @GetMapping("/coupons")
     public ResponseEntity<BaseResponse<CouponList>> getCoupon(HttpServletRequest request) {
         return ResponseEntity.ok(new BaseResponse<>(couponService.getCouponList(request)));
+    }
+
+    @GetMapping("/alarm")
+    public ResponseEntity<BaseResponse<MultiAlarm>> getAlarm (HttpServletRequest request) {
+        return ResponseEntity.ok(new BaseResponse<> (alarmService.getAlarmList(request)));
     }
 
 

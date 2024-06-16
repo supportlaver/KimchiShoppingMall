@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
 import supportkim.shoppingmall.domain.Coupon;
+import supportkim.shoppingmall.domain.alarm.AlarmType;
 import supportkim.shoppingmall.domain.member.Member;
 import supportkim.shoppingmall.jwt.TokenMapping;
 
@@ -52,6 +53,23 @@ public class MemberResponseDto {
                     .memberId(member.getId())
                     .couponName(coupon.getDiscountInfo())
                     .couponDiscountValue(coupon.getDiscountValue())
+                    .build();
+        }
+    }
+
+    @Builder @Getter
+    public static class SignUpWithAlarm {
+        private Long memberId;
+        private String couponName;
+        private int couponDiscountValue;
+        private AlarmType alarmType;
+
+        public static SignUpWithAlarm from(Member member , Coupon coupon , AlarmType alarmType) {
+            return SignUpWithAlarm.builder()
+                    .memberId(member.getId())
+                    .couponName(coupon.getDiscountInfo())
+                    .couponDiscountValue(coupon.getDiscountValue())
+                    .alarmType(alarmType)
                     .build();
         }
     }

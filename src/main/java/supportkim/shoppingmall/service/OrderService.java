@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import supportkim.shoppingmall.api.dto.OrderResponseDto;
 import supportkim.shoppingmall.domain.*;
+import supportkim.shoppingmall.domain.alarm.AlarmType;
 import supportkim.shoppingmall.domain.member.Member;
 import supportkim.shoppingmall.exception.BaseException;
 import supportkim.shoppingmall.exception.ErrorCode;
@@ -29,6 +30,7 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
+    private final AlarmService alarmService;
     private final CouponRepository couponRepository;
     private final KimchiRepository kimchiRepository;
     private final JwtService jwtService;
@@ -63,6 +65,8 @@ public class OrderService {
         Order order = Order.of(orderKimchis, member , orderPrice);
 
         Order savedOrder = orderRepository.save(order);
+
+        alarmService.send(AlarmType.COMPLETE_ORDER,member);
 
         log.info("[함수 끝나기 직전] 김치 수량 확인 : " + kimchiRepository.findById(1L).orElseThrow().getQuantity());
 
