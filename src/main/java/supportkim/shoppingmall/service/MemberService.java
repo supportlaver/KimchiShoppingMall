@@ -64,7 +64,7 @@ public class MemberService {
         member.setPasswordEncoder(passwordEncoder.encode(signUpDto.getPassword()));
         Member savedMember = memberRepository.save(member);
         Coupon coupon = Coupon.signUpCoupon();
-        alarmService.send(AlarmType.CONGRATULATION_SIGN_UP , savedMember);
+        alarmService.send(AlarmType.CONGRATULATION_SIGN_UP , savedMember.getId());
         couponRepository.save(coupon);
         return MemberResponseDto.SignUpWithAlarm.from(member,coupon,AlarmType.CONGRATULATION_SIGN_UP);
     }

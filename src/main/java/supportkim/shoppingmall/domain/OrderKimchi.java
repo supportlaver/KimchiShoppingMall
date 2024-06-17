@@ -43,6 +43,14 @@ public class OrderKimchi extends BaseEntity {
                 .build();
     }
 
+    public static OrderKimchi createEntityByKimchi(Kimchi kimchi , int count) {
+        return OrderKimchi.builder()
+                .count(count)
+                .orderPrice((kimchi.getPrice()) * count)
+                .kimchi(kimchi)
+                .build();
+    }
+
     public void addCount(int count) {
         this.count += count;
     }

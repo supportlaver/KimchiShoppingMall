@@ -4,10 +4,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import supportkim.shoppingmall.api.dto.OrderRequestDto;
 import supportkim.shoppingmall.api.dto.OrderResponseDto;
 import supportkim.shoppingmall.global.BaseResponse;
 import supportkim.shoppingmall.service.OrderService;
+
+import java.nio.file.Path;
 
 import static supportkim.shoppingmall.api.dto.OrderResponseDto.*;
 
@@ -23,6 +27,15 @@ public class OrderController {
     public ResponseEntity<BaseResponse<CompleteOrder>> cartOrder(HttpServletRequest request) {
         return ResponseEntity.ok().body(new BaseResponse<>(orderService.cartOrder(request)));
     }
+
+    // 상품 조회에서 바로 주문하는 API
+    @PostMapping("/{kimchi-id}")
+    public ResponseEntity<BaseResponse<CompleteOrder>> setOrder(@PathVariable("kimchi-id") Long id,
+                                                                @RequestBody OrderRequestDto.SingleOrder singleOrder) {
+        return ResponseEntity.ok().body(new BaseResponse<>(orderService.setOrder(id,singleOrder)));
+    }
+
+
 
 
     // 주문할 때 쿠폰 적용 (현재 모든 회원들에게 발급된 쿠폰은 "회원가입 쿠폰" 만 존재

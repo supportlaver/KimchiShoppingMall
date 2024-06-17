@@ -39,8 +39,17 @@ public class Order extends BaseEntity {
 
     private int orderPrice;
 
-    public static Order of(List<OrderKimchi> orderKimchis , Member member , int orderPrice) {
+    public static Order ofOneKimchi(Member member , int orderPrice) {
 
+        return Order.builder()
+                .orderDate(LocalDateTime.now())
+                .orderStatus(OrderStatus.ORDER)
+                .member(member)
+                .orderPrice(orderPrice)
+                .build();
+    }
+
+    public static Order of(List<OrderKimchi> orderKimchis , Member member , int orderPrice) {
         return Order.builder()
                 .orderDate(LocalDateTime.now())
                 .orderStatus(OrderStatus.ORDER)

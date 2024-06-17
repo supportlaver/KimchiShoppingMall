@@ -4,22 +4,29 @@ import io.micrometer.core.annotation.Counted;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import supportkim.shoppingmall.api.dto.KimchiResponseDto;
+import supportkim.shoppingmall.api.dto.OrderRequestDto;
 import supportkim.shoppingmall.api.dto.OrderResponseDto;
+import supportkim.shoppingmall.consumer.AlarmConsumer;
 import supportkim.shoppingmall.domain.*;
+import supportkim.shoppingmall.domain.alarm.AlarmEvent;
 import supportkim.shoppingmall.domain.alarm.AlarmType;
 import supportkim.shoppingmall.domain.member.Member;
 import supportkim.shoppingmall.exception.BaseException;
 import supportkim.shoppingmall.exception.ErrorCode;
 import supportkim.shoppingmall.jwt.JwtService;
-import supportkim.shoppingmall.repository.CouponRepository;
-import supportkim.shoppingmall.repository.KimchiRepository;
-import supportkim.shoppingmall.repository.MemberRepository;
-import supportkim.shoppingmall.repository.OrderRepository;
+import supportkim.shoppingmall.producer.AlarmProducer;
+import supportkim.shoppingmall.repository.*;
+import supportkim.shoppingmall.utils.ClassUtils;
 
 import java.util.List;
+import java.util.Optional;
 
+import static supportkim.shoppingmall.api.dto.KimchiResponseDto.*;
 import static supportkim.shoppingmall.api.dto.OrderResponseDto.*;
 
 @Service
@@ -33,6 +40,7 @@ public class OrderService {
     private final AlarmService alarmService;
     private final CouponRepository couponRepository;
     private final KimchiRepository kimchiRepository;
+    private final AlarmProducer alarmProducer;
     private final JwtService jwtService;
     private int COUNT = 0;
 
@@ -66,9 +74,48 @@ public class OrderService {
 
         Order savedOrder = orderRepository.save(order);
 
-        alarmService.send(AlarmType.COMPLETE_ORDER,member);
+        alarmService.send(AlarmType.COMPLETE_ORDER,member.getId());
 
         log.info("[함수 끝나기 직전] 김치 수량 확인 : " + kimchiRepository.findById(1L).orElseThrow().getQuantity());
+
+        return CompleteOrder.of(savedOrder,orderPrice);
+    }
+
+    @Transactional
+    @Counted("indicator.order")
+    public CompleteOrder setOrder(Long id , OrderRequestDto.SingleOrder singleOrder) {
+
+        int orderPrice = 0;
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Member member = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), Member.class);
+
+        /**
+         * Filter 에서 이미 확인 후 Cache 해놓기 때문에 또 검증할 필요가 없다.
+         */
+        // Member member = findMemberFromAccessToken(request);
+
+        Kimchi kimchi = kimchiRepository.findById(id)
+                .orElseThrow(() -> new BaseException(ErrorCode.NOT_EXIST_KIMCHI));
+
+
+        OrderKimchi orderKimchi = OrderKimchi.createEntityByKimchi(kimchi , singleOrder.getCount());
+        /**
+         * 수량 감소
+         */
+        orderPrice += orderKimchi.getOrderPrice();
+        orderKimchi.decreaseQuantity(orderKimchi.getCount());
+
+        Order order = Order.ofOneKimchi(member , orderPrice);
+
+        Order savedOrder = orderRepository.save(order);
+
+        /**
+         * Kafka 에 던지기
+         */
+        alarmProducer.send(new AlarmEvent(AlarmType.COMPLETE_ORDER , member.getId()));
+        // alarmService.send(AlarmType.COMPLETE_ORDER,member.getId());
 
         return CompleteOrder.of(savedOrder,orderPrice);
     }

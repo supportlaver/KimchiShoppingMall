@@ -1,0 +1,30 @@
+config:
+  target: 'http://localhost:8080'
+  phases:
+    # 부하 시작 전 예열 (Warm up)
+    - duration: 10
+      arrivalRate: 57
+      name: Warm up - 1
+
+      # 부하 시작
+    - duration: 30
+      arrivalRate: 10
+      rampTo: 562
+      name: Burst Load - 2(점점 트래픽 증가)
+      # 부하 유지
+    - duration: 30
+      arrivalRate: 562
+      name: Sustained Load - 3
+      # 부하를 점점 줄이기
+    - duration: 20
+      arrivalRate: 57
+      rampTo: 50
+      name: End of load - 4
+scenarios:
+  - flow:
+      - post:
+          url: "/api/order/60000"
+          json:
+            count: 3
+          headers:
+            authorization: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsInN1YmplY3QiOiJKSVdPTkBuYXZlci5jb20iLCJleHAiOjE4MTg1MjM1NDh9.SQIrW_INQcPhFeuzUO2xKknUAkBXS2gkeUoNUP4EM5iAoS-TjFnjP9cbb4TPgRpOlhTIKH1kjkAcPEYuXeqqbg'

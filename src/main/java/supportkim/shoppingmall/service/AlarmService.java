@@ -30,7 +30,9 @@ public class AlarmService {
     private final JwtService jwtService;
 
     @Transactional
-    public void send(AlarmType type , Member member) {
+    public void send(AlarmType type , Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new BaseException(ErrorCode.NOT_EXIST_MEMBER));
         Alarm alarm = Alarm.of(type, member);
         alarmRepository.save(alarm);
         /**

@@ -60,6 +60,10 @@ dependencies {
 
 	implementation group: 'org.redisson', name: 'redisson-spring-boot-starter', version: '3.27.2'
 
+	//kafka
+	implementation 'org.springframework.kafka:spring-kafka'
+	testImplementation 'org.springframework.kafka:spring-kafka-test'
+
 
 	// spring cloud
 	//implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
